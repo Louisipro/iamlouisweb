@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Louis</title>
+<meta name="description" content="Louis, 20 ans.">
+<meta name="theme-color" content="#0E0D12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E0D12'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23E8C39E' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---- Charte graphique Miroir · V1 ---------------------------------- */
+  :root{
+    --nuit:       #0E0D12;
+    --fumee:      #17161D;
+    --porcelaine: #F3F0EB;
+    --brume:      #95909F;
+    --halo:       #E8C39E;
+    --froid:      #7C8FE0;
+    --courbe: cubic-bezier(.22,.8,.26,1);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{ height:100%; }
+
+  body{
+    background:var(--nuit);
+    color:var(--porcelaine);
+    font-family:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+    display:grid;
+    place-items:center;
+    min-height:100svh;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* ---- Le halo : une seule source de lumière -------------------------- */
+  .halo{
+    position:fixed;
+    top:50%; left:50%;
+    width:min(96vmin,860px);
+    aspect-ratio:1;
+    translate:-50% -50%;
+    border-radius:999px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* anneau extérieur — froid en fin de dégradé */
+  .halo::before,
+  .halo::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:999px;
+  }
+
+  .halo::before{
+    background:
+      radial-gradient(circle at 50% 50%,
+        transparent 46%,
+        rgba(232,195,158,.10) 54%,
+        rgba(124,143,224,.34) 62%,
+        rgba(124,143,224,.10) 70%,
+        transparent 78%);
+    filter:blur(30px);
+    animation:respiration 16s var(--courbe) infinite;
+  }
+
+  /* anneau intérieur — champagne au cœur, décalé de 2,5 s */
+  .halo::after{
+    inset:11%;
+    background:
+      radial-gradient(circle at 50% 50%,
+        transparent 44%,
+        rgba(232,195,158,.52) 55%,
+        rgba(232,195,158,.16) 66%,
+        transparent 76%);
+    filter:blur(22px);
+    animation:respiration 16s var(--courbe) infinite;
+    animation-delay:-2.5s;
+  }
+
+  @keyframes respiration{
+    0%,100%{ transform:scale(1);     opacity:.88; }
+    50%    { transform:scale(1.045); opacity:1;   }
+  }
+
+  /* ---- Grain : casse le banding sur les grands fonds sombres ---------- */
+  .grain{
+    position:fixed;
+    inset:-50%;
+    z-index:1;
+    pointer-events:none;
+    opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---- Contenu -------------------------------------------------------- */
+  main{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:2rem;
+  }
+
+  h1{
+    font-family:"Gabarito",-apple-system,BlinkMacSystemFont,sans-serif;
+    font-weight:700;
+    font-size:clamp(2.9rem,14vw,6.1rem);
+    letter-spacing:-.035em;
+    line-height:.96;
+    color:var(--porcelaine);
+  }
+
+  p{
+    margin-top:1.1rem;
+    font-size:clamp(1rem,2.4vw,1.14rem);
+    line-height:1.65;
+    color:var(--brume);
+  }
+
+  /* apparition au chargement — 950 ms, décalage 110 ms par élément */
+  .lever{
+    opacity:0;
+    transform:translateY(14px);
+    animation:lever 950ms var(--courbe) forwards;
+  }
+  .lever:nth-child(2){ animation-delay:110ms; }
+
+  @keyframes lever{
+    to{ opacity:1; transform:none; }
+  }
+
+  /* ---- Le halo reste, figé — la page ne perd rien --------------------- */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation:none !important;
+      transition:none !important;
+    }
+    .lever{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="halo" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main>
+    <h1 class="lever">Louis</h1>
+    <p class="lever">20 ans</p>
+  </main>
+</body>
+</html>
