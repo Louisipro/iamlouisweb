@@ -1,629 +1,418 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>iamlouis</title>
-<meta name="description" content="20 ans, et déjà l'expérience d'un cinquantenaire. Ma vie et mes projets : horlogerie, nutrition, technologie.">
-<meta name="theme-color" content="#0E0D12">
-<meta property="og:title" content="iamlouis">
-<meta property="og:description" content="20 ans, et déjà l'expérience d'un cinquantenaire.">
-<meta property="og:image" content="pp.jpg">
+<title>MIROIR — Le changement approche</title>
+<meta name="description" content="Looksmaxxing appliqué à fond, documenté en public pendant 12 mois. Rejoins la liste d'attente.">
+<meta property="og:title" content="MIROIR — Le changement approche">
+<meta property="og:description" content="L'apparence fait tout. Toutes les méthodes de looksmaxxing, documentées en public.">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E0D12'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23E8C39E' stroke-width='2.5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* ---- Charte graphique Miroir · V1 ---------------------------------- */
-  :root{
-    --nuit:       #0E0D12;
-    --fumee:      #17161D;
-    --porcelaine: #F3F0EB;
-    --brume:      #95909F;
-    --halo:       #E8C39E;
-    --froid:      #7C8FE0;
-    --courbe: cubic-bezier(.22,.8,.26,1);
+:root{
+  --nuit:#0E0D12;
+  --fumee:#17161D;
+  --porcelaine:#F3F0EB;
+  --brume:#95909F;
+  --halo:#E8C39E;
+  --froid:#7C8FE0;
 
-    /* surfaces de verre */
-    --verre:        linear-gradient(165deg,rgba(243,240,235,.055),rgba(243,240,235,.018));
-    --verre-bord:   rgba(243,240,235,.075);
-    --verre-bord-f: rgba(243,240,235,.14);
-  }
+  --r-card:28px;
+  --r-pill:999px;
+  --ease:cubic-bezier(.22,.8,.26,1);
+}
 
-  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 
-  html{ scroll-behavior:smooth; }
+body{
+  background:var(--nuit);
+  color:var(--porcelaine);
+  font-family:'Onest',system-ui,sans-serif;
+  font-weight:300;
+  line-height:1.6;
+  overflow-x:hidden;
+  min-height:100vh;
+}
 
-  body{
-    background:var(--nuit);
-    color:var(--porcelaine);
-    font-family:"Onest",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    font-weight:300;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
+/* ---------- grain ---------- */
+.grain{
+  position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
-  section[id]{ scroll-margin-top:2rem; }
+/* ---------- signature : le ring light ---------- */
+.scene{
+  position:absolute;top:-6vh;left:50%;transform:translateX(-50%);
+  width:min(120vw,1100px);aspect-ratio:1;
+  pointer-events:none;z-index:0;
+}
+.glow{
+  position:absolute;inset:14%;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,195,158,.16) 0%,rgba(124,143,224,.09) 45%,transparent 70%);
+  filter:blur(40px);
+  animation:breathe 16s var(--ease) infinite;
+}
+.ring{
+  position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle,
+    transparent 54%,
+    rgba(232,195,158,.30) 62%,
+    rgba(124,143,224,.20) 68%,
+    transparent 74%);
+  filter:blur(14px);
+  animation:breathe 16s var(--ease) infinite;
+}
+.ring--inner{
+  inset:19%;
+  background:radial-gradient(circle,
+    transparent 56%,
+    rgba(243,240,235,.16) 64%,
+    transparent 72%);
+  filter:blur(8px);
+  animation:breathe 16s var(--ease) infinite 2.5s;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1);opacity:.75}
+  50%{transform:scale(1.06);opacity:1}
+}
 
-  /* ---- Grain : casse le banding sur les grands fonds sombres ---------- */
-  .grain{
-    position:fixed;
-    inset:-50%;
-    z-index:100;
-    pointer-events:none;
-    opacity:.04;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+/* ---------- shell ---------- */
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
 
-  /* ---- Eyebrow / label ------------------------------------------------ */
-  .label{
-    display:block;
-    font-weight:500;
-    font-size:clamp(11.5px,1.4vw,12.5px);
-    text-transform:uppercase;
-    letter-spacing:.18em;
-    color:var(--brume);
-    transition:color 300ms var(--courbe);
-  }
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:28px 0;
+}
+.mark{
+  font-family:'Gabarito',sans-serif;font-weight:700;font-size:15px;
+  letter-spacing:.24em;text-transform:uppercase;
+}
+.handle{
+  font-size:13px;color:var(--brume);letter-spacing:.02em;
+}
 
-  /* ==== HERO ============================================================ */
-  .hero{
-    position:relative;
-    min-height:100svh;
-    display:grid;
-    place-items:center;
-    overflow:hidden;
-    padding:4rem 1.5rem;
-  }
+/* ---------- hero ---------- */
+.hero{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:clamp(56px,11vh,120px) 0 clamp(72px,12vh,140px);
+}
 
-  /* ---- Le halo : une seule source de lumière -------------------------- */
-  .halo{
-    position:absolute;
-    top:50%; left:50%;
-    width:min(96vmin,860px);
-    aspect-ratio:1;
-    translate:-50% -50%;
-    border-radius:999px;
-    pointer-events:none;
-    z-index:0;
-  }
+.chip{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:9px 18px 9px 14px;border-radius:var(--r-pill);
+  background:rgba(243,240,235,.04);
+  border:1px solid rgba(243,240,235,.09);
+  backdrop-filter:blur(12px);
+  font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--brume);font-weight:500;
+}
+.dot{
+  width:6px;height:6px;border-radius:50%;background:var(--halo);
+  box-shadow:0 0 0 0 rgba(232,195,158,.5);
+  animation:pulse 2.6s var(--ease) infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(232,195,158,.45)}
+  70%{box-shadow:0 0 0 9px rgba(232,195,158,0)}
+  100%{box-shadow:0 0 0 0 rgba(232,195,158,0)}
+}
 
-  .halo::before,
-  .halo::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-radius:999px;
-  }
+h1{
+  font-family:'Gabarito',sans-serif;
+  font-weight:700;
+  font-size:clamp(2.9rem,8.2vw,6.1rem);
+  line-height:.96;
+  letter-spacing:-.035em;
+  margin:34px 0 0;
+}
+h1 .lueur{
+  display:block;
+  background:linear-gradient(105deg,var(--halo) 0%,#F3E4D2 38%,var(--froid) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
 
-  /* anneau extérieur — froid en fin de dégradé */
-  .halo::before{
-    background:
-      radial-gradient(circle at 50% 50%,
-        transparent 46%,
-        rgba(232,195,158,.10) 54%,
-        rgba(124,143,224,.34) 62%,
-        rgba(124,143,224,.10) 70%,
-        transparent 78%);
-    filter:blur(30px);
-    animation:respiration 16s var(--courbe) infinite;
-  }
+.sub{
+  max-width:41ch;margin:28px auto 0;
+  font-size:clamp(1rem,1.9vw,1.14rem);
+  color:var(--brume);line-height:1.65;
+}
 
-  /* anneau intérieur — champagne au cœur, décalé de 2,5 s */
-  .halo::after{
-    inset:11%;
-    background:
-      radial-gradient(circle at 50% 50%,
-        transparent 44%,
-        rgba(232,195,158,.52) 55%,
-        rgba(232,195,158,.16) 66%,
-        transparent 76%);
-    filter:blur(22px);
-    animation:respiration 16s var(--courbe) infinite;
-    animation-delay:-2.5s;
-  }
+/* ---------- form ---------- */
+.form{
+  width:100%;max-width:470px;margin:42px auto 0;
+  position:relative;
+}
+.field{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 8px 8px 24px;
+  border-radius:var(--r-pill);
+  background:rgba(243,240,235,.045);
+  border:1px solid rgba(243,240,235,.10);
+  backdrop-filter:blur(16px);
+  transition:border-color .35s var(--ease),background .35s var(--ease),box-shadow .35s var(--ease);
+}
+.field:focus-within{
+  border-color:rgba(232,195,158,.42);
+  background:rgba(243,240,235,.07);
+  box-shadow:0 0 44px -12px rgba(232,195,158,.35);
+}
+.field input{
+  flex:1;min-width:0;border:0;background:transparent;outline:none;
+  color:var(--porcelaine);font-family:inherit;font-size:15.5px;font-weight:300;
+  padding:16px 0;
+}
+.field input::placeholder{color:#6D6879}
 
-  @keyframes respiration{
-    0%,100%{ transform:scale(1);     opacity:.88; }
-    50%    { transform:scale(1.045); opacity:1;   }
-  }
+.go{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:8px;
+  border:0;cursor:pointer;
+  padding:15px 24px;border-radius:var(--r-pill);
+  background:var(--porcelaine);color:var(--nuit);
+  font-family:'Gabarito',sans-serif;font-weight:600;font-size:14.5px;
+  letter-spacing:.01em;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s var(--ease);
+}
+.go:hover{
+  transform:translateY(-1px);
+  background:#fff;
+  box-shadow:0 10px 30px -10px rgba(243,240,235,.45);
+}
+.go:active{transform:translateY(0)}
+.go svg{transition:transform .3s var(--ease)}
+.go:hover svg{transform:translateX(3px)}
 
-  .hero__contenu{
-    position:relative;
-    z-index:2;
-    text-align:center;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-  }
+.note{
+  margin-top:18px;font-size:13px;color:#6D6879;letter-spacing:.01em;
+}
 
-  /* ---- Le sujet, au centre de l'anneau -------------------------------- */
-  .avatar{
-    flex:none;
-    width:clamp(104px,17vmin,136px);
-    height:clamp(104px,17vmin,136px);
-    border-radius:999px;
-    overflow:hidden;
-    border:1px solid rgba(243,240,235,.14);
-    box-shadow:0 0 40px rgba(232,195,158,.10);
-    margin-bottom:1.6rem;
-  }
-  /* recadrage serré sur le visage */
-  .avatar img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:29% 0;
-    transform-origin:50% 27%;
-    transform:translateY(17%) scale(2.05);
-  }
+.ok{
+  display:none;
+  padding:22px 26px;border-radius:var(--r-card);
+  background:rgba(232,195,158,.07);
+  border:1px solid rgba(232,195,158,.24);
+  backdrop-filter:blur(16px);
+  font-size:15px;color:var(--porcelaine);
+}
+.ok strong{font-family:'Gabarito',sans-serif;font-weight:600;color:var(--halo)}
+.form.done .field,.form.done .note{display:none}
+.form.done .ok{display:block;animation:up .6s var(--ease) both}
 
-  h1{
-    font-family:"Gabarito",-apple-system,BlinkMacSystemFont,sans-serif;
-    font-weight:700;
-    font-size:clamp(2.6rem,12vw,5.4rem);
-    letter-spacing:-.035em;
-    line-height:.96;
-  }
+.err{
+  display:none;margin-top:16px;
+  font-size:13.5px;color:#E0A5A5;line-height:1.5;
+}
+.form.failed .err{display:block;animation:up .4s var(--ease) both}
+.form.failed .note{display:none}
+.form.failed .field{border-color:rgba(224,165,165,.4)}
 
-  .hero__phrase{
-    margin-top:1.2rem;
-    font-size:clamp(1rem,2.4vw,1.14rem);
-    line-height:1.65;
-    color:var(--brume);
-    max-width:41ch;
-    text-wrap:balance;
-  }
+.go[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none}
+.go[disabled]:hover{background:var(--porcelaine);transform:none;box-shadow:none}
 
-  /* ---- Flèche vers le bas --------------------------------------------- */
-  .descendre{
-    margin-top:2rem;
-    display:grid;
-    place-items:center;
-    width:46px; height:46px;
-    border-radius:999px;
-    border:1px solid var(--verre-bord);
-    background:var(--verre);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    color:var(--brume);
-    transition:color 300ms var(--courbe), border-color 300ms var(--courbe);
-    animation:flotte 4.8s var(--courbe) infinite;
-  }
-  .descendre:hover{ color:var(--porcelaine); border-color:var(--verre-bord-f); }
-  .descendre svg{ width:18px; height:18px; }
+/* ---------- cartes ---------- */
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  padding-bottom:clamp(64px,10vh,110px);
+}
+.card{
+  padding:32px 28px 34px;
+  border-radius:var(--r-card);
+  background:linear-gradient(165deg,rgba(243,240,235,.055),rgba(243,240,235,.018));
+  border:1px solid rgba(243,240,235,.075);
+  backdrop-filter:blur(10px);
+  transition:border-color .45s var(--ease),transform .45s var(--ease);
+}
+.card:hover{border-color:rgba(232,195,158,.28);transform:translateY(-3px)}
+.card .lab{
+  font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--halo);font-weight:500;
+}
+.card h3{
+  font-family:'Gabarito',sans-serif;font-weight:600;
+  font-size:1.32rem;letter-spacing:-.015em;margin:14px 0 10px;
+}
+.card p{font-size:14.5px;color:var(--brume);line-height:1.6}
 
-  @keyframes flotte{
-    0%,100%{ transform:translateY(0); }
-    50%    { transform:translateY(7px); }
-  }
+/* ---------- footer ---------- */
+footer{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:26px 0 40px;
+  border-top:1px solid rgba(243,240,235,.06);
+  font-size:12.5px;color:#5F5A6B;letter-spacing:.02em;
+}
 
-  /* ==== SECTIONS ======================================================== */
-  .bloc{
-    position:relative;
-    z-index:2;
-    max-width:1000px;
-    margin-inline:auto;
-    padding:clamp(5rem,13vh,9rem) 1.5rem 0;
-  }
-  .bloc:last-of-type{ padding-bottom:clamp(4rem,10vh,6rem); }
+/* ---------- reveal ---------- */
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.rise{opacity:0;animation:up .95s var(--ease) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.16s}.d3{animation-delay:.27s}
+.d4{animation-delay:.38s}.d5{animation-delay:.49s}
+.obs{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.obs.in{opacity:1;transform:none}
+.obs:nth-child(2){transition-delay:.1s}
+.obs:nth-child(3){transition-delay:.2s}
 
-  .bloc__entete{
-    text-align:center;
-    margin-bottom:clamp(2.5rem,7vh,4rem);
-  }
+:focus-visible{outline:2px solid var(--halo);outline-offset:3px;border-radius:6px}
 
-  .bloc__titre{
-    font-family:"Gabarito",sans-serif;
-    font-weight:700;
-    font-size:clamp(2rem,6vw,3.1rem);
-    letter-spacing:-.035em;
-    line-height:1;
-    margin-top:.9rem;
-  }
+@media (max-width:800px){
+  .grid{grid-template-columns:1fr}
+  .scene{top:-2vh;width:150vw}
+}
+@media (max-width:480px){
+  .field{padding:7px 7px 7px 18px;gap:6px}
+  .go{padding:14px 18px}
+  .go span{display:none}
+  .field input{font-size:15px}
+}
 
-  /* ==== PROJETS ========================================================= */
-  .liste{
-    display:flex;
-    flex-direction:column;
-    gap:1.1rem;
-  }
-
-  /* ---- Carte : du verre, posé dans le noir ---------------------------- */
-  .projet{
-    display:grid;
-    grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
-    gap:clamp(1.5rem,4vw,3rem);
-    padding:clamp(1.6rem,4vw,2.4rem);
-    border-radius:28px;
-    border:1px solid var(--verre-bord);
-    background:var(--verre);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-    text-decoration:none;
-    color:inherit;
-    transition:
-      transform 300ms var(--courbe),
-      border-color 300ms var(--courbe),
-      box-shadow 300ms var(--courbe);
-  }
-
-  .projet:hover,
-  .projet:focus-visible{
-    transform:translateY(-1px);
-    border-color:var(--verre-bord-f);
-    box-shadow:0 0 44px rgba(232,195,158,.07);
-  }
-
-  .projet:focus-visible{
-    outline:2px solid var(--halo);
-    outline-offset:3px;
-  }
-
-  /* ---- Icône de projet ------------------------------------------------ */
-  .icone{
-    display:grid;
-    place-items:center;
-    width:44px; height:44px;
-    border-radius:999px;
-    border:1px solid var(--verre-bord);
-    background:var(--verre);
-    color:var(--brume);
-    margin-bottom:1.15rem;
-    transition:color 300ms var(--courbe), border-color 300ms var(--courbe);
-  }
-  .icone svg{ width:20px; height:20px; }
-  .projet:hover .icone{ color:var(--porcelaine); border-color:var(--verre-bord-f); }
-
-  /* Un seul accent chaud par écran : le Halo n'apparaît que sur la carte survolée */
-  .projet:hover .label,
-  .projet:focus-visible .label,
-  .projet:hover .projet__lien,
-  .projet:focus-visible .projet__lien{ color:var(--halo); }
-
-  .projet__nom{
-    font-family:"Gabarito",sans-serif;
-    font-weight:600;
-    font-size:1.32rem;
-    letter-spacing:-.015em;
-    margin-top:.75rem;
-  }
-
-  .projet__poignee{
-    margin-top:.35rem;
-    font-size:.94rem;
-    color:var(--brume);
-  }
-
-  /* ---- Chip d'état ---------------------------------------------------- */
-  .chip{
-    display:inline-flex;
-    align-items:center;
-    gap:.55rem;
-    margin-top:1.1rem;
-    padding:.42rem .85rem;
-    border-radius:999px;
-    border:1px solid var(--verre-bord);
-    background:var(--verre);
-    font-weight:500;
-    font-size:11.5px;
-    text-transform:uppercase;
-    letter-spacing:.14em;
-    color:var(--brume);
-    transition:border-color 300ms var(--courbe);
-  }
-  .chip::before{
-    content:"";
-    width:6px; height:6px;
-    border-radius:999px;
-    background:currentColor;
-    transition:background 300ms var(--courbe);
-  }
-  .projet:hover .chip{ border-color:var(--verre-bord-f); }
-  .projet:hover .chip::before{
-    background:var(--halo);
-    animation:pulse 2.6s var(--courbe) infinite;
-  }
-
-  @keyframes pulse{
-    0%,100%{ opacity:1;  box-shadow:0 0 0 0   rgba(232,195,158,.45); }
-    70%    { opacity:.7; box-shadow:0 0 0 6px rgba(232,195,158,0);   }
-  }
-
-  .projet__texte p{
-    font-size:clamp(1rem,2.2vw,1.06rem);
-    line-height:1.65;
-    color:var(--brume);
-    max-width:41ch;
-  }
-  .projet__texte p + p{ margin-top:.9rem; }
-
-  .projet__lien{
-    display:inline-block;
-    margin-top:1.3rem;
-    font-family:"Gabarito",sans-serif;
-    font-weight:600;
-    font-size:14.5px;
-    color:var(--porcelaine);
-    transition:color 300ms var(--courbe);
-  }
-  .projet__lien span{
-    display:inline-block;
-    transition:transform 300ms var(--courbe);
-  }
-  .projet:hover .projet__lien span{ transform:translateX(4px); }
-
-  @media (max-width:760px){
-    .projet{ grid-template-columns:1fr; gap:1.1rem; }
-  }
-
-  /* ==== CONTACT ========================================================= */
-  .contact{
-    text-align:center;
-    padding:clamp(2.6rem,7vw,3.6rem) clamp(1.5rem,5vw,3rem);
-    border-radius:28px;
-    border:1px solid var(--verre-bord);
-    background:var(--verre);
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-  }
-
-  .contact__phrase{
-    margin:1rem auto 0;
-    font-size:clamp(1rem,2.2vw,1.06rem);
-    line-height:1.65;
-    color:var(--brume);
-    max-width:41ch;
-  }
-
-  /* ---- Bouton principal : Porcelaine plein, texte Nuit ---------------- */
-  .bouton{
-    display:inline-block;
-    margin-top:1.9rem;
-    padding:.92rem 1.6rem;
-    border-radius:999px;
-    background:var(--porcelaine);
-    color:var(--nuit);
-    font-family:"Gabarito",sans-serif;
-    font-weight:600;
-    font-size:14.5px;
-    text-decoration:none;
-    transition:
-      background 300ms var(--courbe),
-      transform 300ms var(--courbe),
-      box-shadow 300ms var(--courbe);
-  }
-  .bouton:hover{
-    background:#fff;
-    transform:translateY(-1px);
-    box-shadow:0 0 34px rgba(243,240,235,.16);
-  }
-  .bouton:focus-visible{
-    outline:2px solid var(--halo);
-    outline-offset:3px;
-  }
-
-  .contact__mail{
-    display:inline-block;
-    margin-top:1.2rem;
-    font-size:.97rem;
-    color:var(--brume);
-    text-decoration:none;
-    border-bottom:1px solid transparent;
-    transition:color 300ms var(--courbe), border-color 300ms var(--courbe);
-  }
-  .contact__mail:hover{
-    color:var(--porcelaine);
-    border-bottom-color:var(--verre-bord-f);
-  }
-
-  /* ==== PIED DE PAGE ==================================================== */
-  footer{
-    position:relative;
-    z-index:2;
-    max-width:1000px;
-    margin-inline:auto;
-    padding:clamp(3rem,8vh,5rem) 1.5rem clamp(2.5rem,6vh,3.5rem);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:1rem;
-    font-size:.88rem;
-    color:var(--brume);
-  }
-  footer .marque{
-    font-family:"Gabarito",sans-serif;
-    font-weight:600;
-    letter-spacing:-.015em;
-    color:var(--porcelaine);
-  }
-
-  /* ==== APPARITIONS ===================================================== */
-  /* 950 ms, décalage 110 ms par élément, courbe unique */
-  .lever{
-    opacity:0;
-    transform:translateY(14px);
-    transition:
-      opacity 950ms var(--courbe),
-      transform 950ms var(--courbe);
-  }
-  .lever.vu{ opacity:1; transform:none; }
-
-  .hero .lever:nth-child(1){ transition-delay:120ms; }
-  .hero .lever:nth-child(2){ transition-delay:230ms; }
-  .hero .lever:nth-child(3){ transition-delay:340ms; }
-  .hero .lever:nth-child(4){ transition-delay:560ms; }
-
-  /* ---- Le halo reste, figé — la page ne perd rien --------------------- */
-  @media (prefers-reduced-motion:reduce){
-    html{ scroll-behavior:auto; }
-    *,*::before,*::after{
-      animation:none !important;
-      transition:none !important;
-    }
-    .lever{ opacity:1; transform:none; }
-  }
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise,.obs{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
 
-  <header class="hero">
-    <div class="halo" aria-hidden="true"></div>
+<div class="grain"></div>
 
-    <div class="hero__contenu">
-      <span class="avatar lever">
-        <img src="pp.jpg" alt="Portrait de Louis" width="1100" height="717">
-      </span>
-      <h1 class="lever">iamlouis</h1>
-      <p class="hero__phrase lever">
-        20 ans, et déjà l'expérience d'un cinquantenaire.
-        Découvre ma vie et mes projets.
-      </p>
-      <a href="#projets" class="descendre lever" aria-label="Descendre vers mes projets">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 5v14M5 13l7 7 7-7"/>
-        </svg>
-      </a>
-    </div>
+<div class="wrap">
+  <div class="scene" aria-hidden="true">
+    <div class="glow"></div>
+    <div class="ring"></div>
+    <div class="ring ring--inner"></div>
+  </div>
+
+  <header class="rise d1">
+    <div class="mark">Miroir</div>
+    <span class="handle">iamlouis</span>
   </header>
 
-  <!-- ==== PROJETS ==================================================== -->
-  <section class="bloc" id="projets">
-    <div class="bloc__entete">
-      <span class="label lever">Ce que je construis</span>
-      <h2 class="bloc__titre lever">Mes projets</h2>
-    </div>
+  <main class="hero">
+    <div class="chip rise d2"><span class="dot"></span>Bientôt · liste d'attente</div>
 
-    <div class="liste">
+    <h1 class="rise d3">
+      Le changement approche.
+      <span class="lueur">L'apparence fait tout.</span>
+    </h1>
 
-      <a class="projet lever"
-         href="https://www.instagram.com/louisnny.watches/"
-         target="_blank" rel="noopener noreferrer">
-        <div>
-          <span class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="6"/>
-              <path d="M12 9.5V12l1.7 1.2"/>
-              <path d="M9.2 6.3 9.6 3h4.8l.4 3.3M9.2 17.7l.4 3.3h4.8l.4-3.3"/>
-            </svg>
-          </span>
-          <span class="label">Horlogerie</span>
-          <h3 class="projet__nom">Louisnny Watches</h3>
-          <p class="projet__poignee">@louisnny.watches</p>
-          <span class="chip">En ligne</span>
-        </div>
-        <div class="projet__texte">
-          <p>Six années de passion pour l'horlogerie, enfin concrétisées.</p>
-          <p>2020, le restaurant d'un village. Un homme, une allure, et une
-            montre que je n'arrive plus à quitter des yeux. Le soir même,
-            des heures de recherche : c'était une Rolex Batman.</p>
-          <p>Depuis, je n'ai plus arrêté. Les modèles, les marques, leurs
-            histoires. J'ai appris à admirer le luxe autant qu'à porter de
-            l'abordable. Aujourd'hui, je raconte ce milieu fabuleux : les
-            garde-temps.</p>
-          <p class="projet__lien">Voir sur Instagram <span>→</span></p>
-        </div>
-      </a>
+    <p class="sub rise d4">
+      Je vais appliquer toutes les méthodes de looksmaxxing possibles
+      pour maximiser mon apparence. Et devenir : meilleur.
+    </p>
 
-      <a class="projet lever"
-         href="https://cravia.app"
-         target="_blank" rel="noopener noreferrer">
-        <div>
-          <span class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <path d="M13 2 5 13h6l-1 9 8-11h-6l1-9z"/>
-            </svg>
-          </span>
-          <span class="label">Nutrition &amp; sport</span>
-          <h3 class="projet__nom">Cravia</h3>
-          <p class="projet__poignee">cravia.app</p>
-          <span class="chip">En développement</span>
-        </div>
-        <div class="projet__texte">
-          <p>J'aime le sport. J'aime la nourriture.</p>
-          <p>Alors pourquoi ne pas construire une application de nutrition
-            pensée pour ceux qui s'entraînent ? La voici : Cravia.</p>
-          <p class="projet__lien">Ouvrir cravia.app <span>→</span></p>
-        </div>
-      </a>
+    <form class="form rise d5" id="form" novalidate>
+      <div class="field">
+        <label for="mail" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Ton adresse email</label>
+        <input id="mail" type="email" name="email" placeholder="ton@email.com" autocomplete="email" required>
+        <button class="go" type="submit">
+          <span>Rejoindre</span>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <p class="note">Pas de spam. Un seul email : le jour où ça sort.</p>
+      <p class="err" id="err" role="alert"></p>
+      <div class="ok" role="status">
+        <strong>Tu es sur la liste.</strong><br>
+        Tu recevras le premier épisode avant tout le monde.
+      </div>
+    </form>
+  </main>
 
-      <a class="projet lever"
-         href="https://www.instagram.com/louisdeploys/"
-         target="_blank" rel="noopener noreferrer">
-        <div>
-          <span class="icone" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <rect x="7.5" y="7.5" width="9" height="9" rx="2"/>
-              <path d="M10 4v3.5M14 4v3.5M10 16.5V20M14 16.5V20M4 10h3.5M4 14h3.5M16.5 10H20M16.5 14H20"/>
-            </svg>
-          </span>
-          <span class="label">Technologie &amp; IA</span>
-          <h3 class="projet__nom">Louis Deploys</h3>
-          <p class="projet__poignee">@louisdeploys</p>
-          <span class="chip">Nouveau</span>
-        </div>
-        <div class="projet__texte">
-          <p>J'aime beaucoup de choses, vous l'aurez compris.</p>
-          <p>Et ce qui me fascine de plus en plus : la technologie, et l'IA.</p>
-          <p class="projet__lien">Voir sur Instagram <span>→</span></p>
-        </div>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ==== CONTACT ==================================================== -->
-  <section class="bloc" id="contact">
-    <div class="contact lever">
-      <span class="label">Écris-moi</span>
-      <h2 class="bloc__titre">On se parle&nbsp;?</h2>
-      <p class="contact__phrase">
-        Une question, une idée, une collaboration. Ma boîte mail est
-        toujours ouverte.
-      </p>
-      <a class="bouton" href="mailto:louis.lantonne@gmail.com">M'écrire</a>
-      <br>
-      <a class="contact__mail" href="mailto:louis.lantonne@gmail.com">louis.lantonne@gmail.com</a>
-    </div>
+  <section class="grid">
+    <article class="card obs">
+      <div class="lab">En public</div>
+      <h3>Tout est filmé</h3>
+      <p>Chaque étape passe à l'écran, y compris les mois où rien ne bouge.</p>
+    </article>
+    <article class="card obs">
+      <div class="lab">Le protocole</div>
+      <h3>Softmaxxing d'abord</h3>
+      <p>Mewing, skincare, bodyfat, grooming, style, posture. Le hardmaxxing ne vient qu'après. S'il vient.</p>
+    </article>
+    <article class="card obs">
+      <div class="lab">La raison</div>
+      <h3>Un déclic</h3>
+      <p>Une photo, un miroir, un jour précis. Tout part de là.</p>
+    </article>
   </section>
 
   <footer>
-    <span class="marque">iamlouis.co</span>
-    <span>© 2026</span>
+    <span>MIROIR — 2026</span>
+    <span>Lancement bientôt</span>
   </footer>
+</div>
 
 <script>
-  (function(){
-    var cibles = document.querySelectorAll('.lever');
+// Révélation au scroll
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.2 });
+document.querySelectorAll('.obs').forEach(el => io.observe(el));
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-        !('IntersectionObserver' in window)) {
-      cibles.forEach(function(e){ e.classList.add('vu'); });
+// ─── SUPABASE ────────────────────────────────────────────
+// Clé « publishable » : conçue pour être publique.
+// C'est la RLS sur la table waitlist qui protège les emails, pas cette clé.
+const SUPABASE_URL = 'https://mcueihmixpmqtpwcxfcm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_zk23O7Fli7Qc6Z_xyPyr-w_wSQDMOsE';
+// ─────────────────────────────────────────────────────────
+
+const form = document.getElementById('form');
+const input = document.getElementById('mail');
+const err = document.getElementById('err');
+const btn = form.querySelector('.go');
+const btnLabel = btn.querySelector('span');
+
+const showError = (msg) => {
+  err.textContent = msg;
+  form.classList.add('failed');
+};
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  form.classList.remove('failed');
+
+  const email = input.value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    showError("Cette adresse n'a pas l'air valide. Vérifie-la.");
+    input.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btnLabel.textContent = 'Une seconde';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email, source: 'waitlist' })
+    });
+
+    // 409 = email déjà présent. Pour la personne, c'est un succès.
+    if (res.ok || res.status === 409) {
+      form.classList.add('done');
       return;
     }
 
-    var obs = new IntersectionObserver(function(entrees){
-      entrees.forEach(function(entree){
-        if (!entree.isIntersecting) return;
-        obs.unobserve(entree.target);
-        entree.target.classList.add('vu');
-      });
-    }, { threshold:.15, rootMargin:'0px 0px -8% 0px' });
-
-    // décalage 110 ms par élément dans une même section
-    document.querySelectorAll('#projets .lever').forEach(function(e,i){
-      e.style.transitionDelay = (i * 110) + 'ms';
-    });
-
-    cibles.forEach(function(e){ obs.observe(e); });
-  })();
+    showError("L'inscription n'est pas passée. Réessaie dans un instant.");
+  } catch {
+    showError('Connexion impossible. Vérifie ton réseau et réessaie.');
+  } finally {
+    btn.disabled = false;
+    btnLabel.textContent = 'Rejoindre';
+  }
+});
 </script>
 </body>
 </html>
