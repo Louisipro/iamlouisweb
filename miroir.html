@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MIROIR — Le changement approche</title>
-<meta name="description" content="12 mois de looksmaxxing documentés en public. Sans filtre. Rejoins la liste d'attente.">
+<meta name="description" content="Looksmaxxing appliqué à fond, documenté en public pendant 12 mois. Rejoins la liste d'attente.">
 <meta property="og:title" content="MIROIR — Le changement approche">
-<meta property="og:description" content="L'apparence fait tout. 12 mois documentés en public.">
+<meta property="og:description" content="L'apparence fait tout. Toutes les méthodes de looksmaxxing, documentées en public.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -202,6 +202,17 @@ h1 .lueur{
 .form.done .field,.form.done .note{display:none}
 .form.done .ok{display:block;animation:up .6s var(--ease) both}
 
+.err{
+  display:none;margin-top:16px;
+  font-size:13.5px;color:#E0A5A5;line-height:1.5;
+}
+.form.failed .err{display:block;animation:up .4s var(--ease) both}
+.form.failed .note{display:none}
+.form.failed .field{border-color:rgba(224,165,165,.4)}
+
+.go[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none}
+.go[disabled]:hover{background:var(--porcelaine);transform:none;box-shadow:none}
+
 /* ---------- cartes ---------- */
 .grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
@@ -289,8 +300,8 @@ footer{
     </h1>
 
     <p class="sub rise d4">
-      Pendant 12 mois, je documente tout : entraînement, peau, cheveux, style, sommeil, posture.
-      En public, sans filtre, sans avant/après truqué.
+      Je vais appliquer toutes les méthodes de looksmaxxing possibles
+      pour maximiser mon apparence. Et devenir : meilleur.
     </p>
 
     <form class="form rise d5" id="form" novalidate>
@@ -305,6 +316,7 @@ footer{
         </button>
       </div>
       <p class="note">Pas de spam. Un seul email : le jour où ça sort.</p>
+      <p class="err" id="err" role="alert"></p>
       <div class="ok" role="status">
         <strong>Tu es sur la liste.</strong><br>
         Tu recevras le premier épisode avant tout le monde.
@@ -320,13 +332,13 @@ footer{
     </article>
     <article class="card obs">
       <div class="lab">Le protocole</div>
-      <h3>Zéro raccourci</h3>
-      <p>Ce qui change vraiment un visage : le sommeil, la peau, le gras, le style. Dans cet ordre.</p>
+      <h3>Softmaxxing d'abord</h3>
+      <p>Mewing, skincare, bodyfat, grooming, style, posture. Le hardmaxxing ne vient qu'après. S'il vient.</p>
     </article>
     <article class="card obs">
-      <div class="lab">Les preuves</div>
-      <h3>Même lumière, tous les 30 jours</h3>
-      <p>Mêmes angles, même cadrage, mêmes conditions. Impossible de tricher.</p>
+      <div class="lab">La raison</div>
+      <h3>Un déclic</h3>
+      <p>Une photo, un miroir, un jour précis. Tout part de là.</p>
     </article>
   </section>
 
@@ -343,26 +355,63 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 document.querySelectorAll('.obs').forEach(el => io.observe(el));
 
-// Inscription
+// ─── SUPABASE ────────────────────────────────────────────
+// Clé « publishable » : conçue pour être publique.
+// C'est la RLS sur la table waitlist qui protège les emails, pas cette clé.
+const SUPABASE_URL = 'https://mcueihmixpmqtpwcxfcm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_zk23O7Fli7Qc6Z_xyPyr-w_wSQDMOsE';
+// ─────────────────────────────────────────────────────────
+
 const form = document.getElementById('form');
+const input = document.getElementById('mail');
+const err = document.getElementById('err');
+const btn = form.querySelector('.go');
+const btnLabel = btn.querySelector('span');
+
+const showError = (msg) => {
+  err.textContent = msg;
+  form.classList.add('failed');
+};
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const input = document.getElementById('mail');
-  if (!input.value || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)) {
+  form.classList.remove('failed');
+
+  const email = input.value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    showError("Cette adresse n'a pas l'air valide. Vérifie-la.");
     input.focus();
     return;
   }
 
-  // ── BRANCHE TON OUTIL ICI ────────────────────────────────
-  // Exemple Formspree / Beehiiv / Tally :
-  // await fetch('https://formspree.io/f/TON_ID', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-  //   body: JSON.stringify({ email: input.value })
-  // });
-  // ─────────────────────────────────────────────────────────
+  btn.disabled = true;
+  btnLabel.textContent = 'Une seconde';
 
-  form.classList.add('done');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email, source: 'waitlist' })
+    });
+
+    // 409 = email déjà présent. Pour la personne, c'est un succès.
+    if (res.ok || res.status === 409) {
+      form.classList.add('done');
+      return;
+    }
+
+    showError("L'inscription n'est pas passée. Réessaie dans un instant.");
+  } catch {
+    showError('Connexion impossible. Vérifie ton réseau et réessaie.');
+  } finally {
+    btn.disabled = false;
+    btnLabel.textContent = 'Rejoindre';
+  }
 });
 </script>
 </body>
