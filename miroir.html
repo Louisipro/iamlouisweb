@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MIROIR — Le changement approche</title>
+<meta name="description" content="Looksmaxxing appliqué à fond, documenté en public pendant 12 mois. Rejoins la liste d'attente.">
+<meta property="og:title" content="MIROIR — Le changement approche">
+<meta property="og:description" content="L'apparence fait tout. Toutes les méthodes de looksmaxxing, documentées en public.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --nuit:#0E0D12;
+  --fumee:#17161D;
+  --porcelaine:#F3F0EB;
+  --brume:#95909F;
+  --halo:#E8C39E;
+  --froid:#7C8FE0;
+
+  --r-card:28px;
+  --r-pill:999px;
+  --ease:cubic-bezier(.22,.8,.26,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+body{
+  background:var(--nuit);
+  color:var(--porcelaine);
+  font-family:'Onest',system-ui,sans-serif;
+  font-weight:300;
+  line-height:1.6;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+.grain{
+  position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.scene{
+  position:absolute;top:-6vh;left:50%;transform:translateX(-50%);
+  width:min(120vw,1100px);aspect-ratio:1;
+  pointer-events:none;z-index:0;
+}
+.glow{
+  position:absolute;inset:14%;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,195,158,.16) 0%,rgba(124,143,224,.09) 45%,transparent 70%);
+  filter:blur(40px);
+  animation:breathe 16s var(--ease) infinite;
+}
+.ring{
+  position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle,
+    transparent 54%,
+    rgba(232,195,158,.30) 62%,
+    rgba(124,143,224,.20) 68%,
+    transparent 74%);
+  filter:blur(14px);
+  animation:breathe 16s var(--ease) infinite;
+}
+.ring--inner{
+  inset:19%;
+  background:radial-gradient(circle,
+    transparent 56%,
+    rgba(243,240,235,.16) 64%,
+    transparent 72%);
+  filter:blur(8px);
+  animation:breathe 16s var(--ease) infinite 2.5s;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1);opacity:.75}
+  50%{transform:scale(1.06);opacity:1}
+}
+
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
+
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:28px 0;
+}
+.mark{
+  font-family:'Gabarito',sans-serif;font-weight:700;font-size:15px;
+  letter-spacing:.24em;text-transform:uppercase;
+}
+.handle{
+  font-size:13px;color:var(--brume);letter-spacing:.02em;
+  text-decoration:none;display:inline-flex;align-items:center;gap:7px;
+  transition:color .3s var(--ease);
+}
+.handle:hover{color:var(--porcelaine)}
+.handle svg{transition:transform .3s var(--ease)}
+.handle:hover svg{transform:translateX(-3px)}
+
+.piege{
+  position:absolute;left:-9999px;width:1px;height:1px;
+  opacity:0;pointer-events:none;
+}
+
+.hero{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:clamp(56px,11vh,120px) 0 clamp(72px,12vh,140px);
+}
+
+.chip{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:9px 18px 9px 14px;border-radius:var(--r-pill);
+  background:rgba(243,240,235,.04);
+  border:1px solid rgba(243,240,235,.09);
+  backdrop-filter:blur(12px);
+  font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--brume);font-weight:500;
+}
+.dot{
+  width:6px;height:6px;border-radius:50%;background:var(--halo);
+  box-shadow:0 0 0 0 rgba(232,195,158,.5);
+  animation:pulse 2.6s var(--ease) infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(232,195,158,.45)}
+  70%{box-shadow:0 0 0 9px rgba(232,195,158,0)}
+  100%{box-shadow:0 0 0 0 rgba(232,195,158,0)}
+}
+
+h1{
+  font-family:'Gabarito',sans-serif;
+  font-weight:700;
+  font-size:clamp(2.9rem,8.2vw,6.1rem);
+  line-height:.96;
+  letter-spacing:-.035em;
+  margin:34px 0 0;
+}
+h1 .lueur{
+  display:block;
+  background:linear-gradient(105deg,var(--halo) 0%,#F3E4D2 38%,var(--froid) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+
+.sub{
+  max-width:41ch;margin:28px auto 0;
+  font-size:clamp(1rem,1.9vw,1.14rem);
+  color:var(--brume);line-height:1.65;
+}
+
+.form{
+  width:100%;max-width:470px;margin:42px auto 0;
+  position:relative;
+}
+.field{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 8px 8px 24px;
+  border-radius:var(--r-pill);
+  background:rgba(243,240,235,.045);
+  border:1px solid rgba(243,240,235,.10);
+  backdrop-filter:blur(16px);
+  transition:border-color .35s var(--ease),background .35s var(--ease),box-shadow .35s var(--ease);
+}
+.field:focus-within{
+  border-color:rgba(232,195,158,.42);
+  background:rgba(243,240,235,.07);
+  box-shadow:0 0 44px -12px rgba(232,195,158,.35);
+}
+.field input{
+  flex:1;min-width:0;border:0;background:transparent;outline:none;
+  color:var(--porcelaine);font-family:inherit;font-size:15.5px;font-weight:300;
+  padding:16px 0;
+}
+.field input::placeholder{color:#6D6879}
+
+.go{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:8px;
+  border:0;cursor:pointer;
+  padding:15px 24px;border-radius:var(--r-pill);
+  background:var(--porcelaine);color:var(--nuit);
+  font-family:'Gabarito',sans-serif;font-weight:600;font-size:14.5px;
+  letter-spacing:.01em;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s var(--ease);
+}
+.go:hover{
+  transform:translateY(-1px);
+  background:#fff;
+  box-shadow:0 10px 30px -10px rgba(243,240,235,.45);
+}
+.go:active{transform:translateY(0)}
+.go svg{transition:transform .3s var(--ease)}
+.go:hover svg{transform:translateX(3px)}
+
+.note{
+  margin-top:18px;font-size:13px;color:#6D6879;letter-spacing:.01em;
+}
+
+.ok{
+  display:none;
+  padding:22px 26px;border-radius:var(--r-card);
+  background:rgba(232,195,158,.07);
+  border:1px solid rgba(232,195,158,.24);
+  backdrop-filter:blur(16px);
+  font-size:15px;color:var(--porcelaine);
+}
+.ok strong{font-family:'Gabarito',sans-serif;font-weight:600;color:var(--halo)}
+.form.done .field,.form.done .note{display:none}
+.form.done .ok{display:block;animation:up .6s var(--ease) both}
+
+.err{
+  display:none;margin-top:16px;
+  font-size:13.5px;color:#E0A5A5;line-height:1.5;
+}
+.form.failed .err{display:block;animation:up .4s var(--ease) both}
+.form.failed .note{display:none}
+.form.failed .field{border-color:rgba(224,165,165,.4)}
+
+.go[disabled]{opacity:.55;cursor:default;transform:none;box-shadow:none}
+.go[disabled]:hover{background:var(--porcelaine);transform:none;box-shadow:none}
+
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  padding-bottom:clamp(64px,10vh,110px);
+}
+.card{
+  padding:32px 28px 34px;
+  border-radius:var(--r-card);
+  background:linear-gradient(165deg,rgba(243,240,235,.055),rgba(243,240,235,.018));
+  border:1px solid rgba(243,240,235,.075);
+  backdrop-filter:blur(10px);
+  transition:border-color .45s var(--ease),transform .45s var(--ease);
+}
+.card:hover{border-color:rgba(232,195,158,.28);transform:translateY(-3px)}
+.card .lab{
+  font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--halo);font-weight:500;
+}
+.card h3{
+  font-family:'Gabarito',sans-serif;font-weight:600;
+  font-size:1.32rem;letter-spacing:-.015em;margin:14px 0 10px;
+}
+.card p{font-size:14.5px;color:var(--brume);line-height:1.6}
+
+footer{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:26px 0 40px;
+  border-top:1px solid rgba(243,240,235,.06);
+  font-size:12.5px;color:#5F5A6B;letter-spacing:.02em;
+}
+
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.rise{opacity:0;animation:up .95s var(--ease) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.16s}.d3{animation-delay:.27s}
+.d4{animation-delay:.38s}.d5{animation-delay:.49s}
+.obs{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.obs.in{opacity:1;transform:none}
+.obs:nth-child(2){transition-delay:.1s}
+.obs:nth-child(3){transition-delay:.2s}
+
+:focus-visible{outline:2px solid var(--halo);outline-offset:3px;border-radius:6px}
+
+@media (max-width:800px){
+  .grid{grid-template-columns:1fr}
+  .scene{top:-2vh;width:150vw}
+}
+@media (max-width:480px){
+  .field{padding:7px 7px 7px 18px;gap:6px}
+  .go{padding:14px 18px}
+  .go span{display:none}
+  .field input{font-size:15px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rise,.obs{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<div class="wrap">
+  <div class="scene" aria-hidden="true">
+    <div class="glow"></div>
+    <div class="ring"></div>
+    <div class="ring ring--inner"></div>
+  </div>
+
+  <header class="rise d1">
+    <div class="mark">Miroir</div>
+    <a class="handle" href="index.html">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M13.5 8h-11M7 3.5 2.5 8 7 12.5"/>
+      </svg>
+      iamlouis
+    </a>
+  </header>
+
+  <main class="hero">
+    <div class="chip rise d2"><span class="dot"></span>Bientôt · liste d'attente</div>
+
+    <h1 class="rise d3">
+      Le changement approche.
+      <span class="lueur">L'apparence fait tout.</span>
+    </h1>
+
+    <p class="sub rise d4">
+      Je vais appliquer toutes les méthodes de looksmaxxing possibles
+      pour maximiser mon apparence. Et devenir : meilleur.
+    </p>
+
+    <form class="form rise d5" id="form" novalidate>
+      <div class="field">
+        <label for="mail" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Ton adresse email</label>
+        <input id="mail" type="email" name="email" placeholder="ton@email.com" autocomplete="email" required>
+        <button class="go" type="submit">
+          <span>Rejoindre</span>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="piege" aria-hidden="true">
+        <label for="site">Ne pas remplir</label>
+        <input id="site" name="site" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <p class="note">Pas de spam. Un seul email : le jour où ça sort.</p>
+      <p class="err" id="err" role="alert"></p>
+      <div class="ok" role="status">
+        <strong>Tu es sur la liste.</strong><br>
+        Tu recevras le premier épisode avant tout le monde.
+      </div>
+    </form>
+  </main>
+
+  <section class="grid">
+    <article class="card obs">
+      <div class="lab">En public</div>
+      <h3>Tout est filmé</h3>
+      <p>Chaque étape passe à l'écran, y compris les mois où rien ne bouge.</p>
+    </article>
+    <article class="card obs">
+      <div class="lab">Le protocole</div>
+      <h3>Domaine par domaine</h3>
+      <p>Dix cases, dix domaines. Chacune verrouillée jusqu'à ce que j'aie assez de recul pour en parler.</p>
+    </article>
+    <article class="card obs">
+      <div class="lab">La raison</div>
+      <h3>Un déclic</h3>
+      <p>Une photo, un miroir, un jour précis. Tout part de là.</p>
+    </article>
+  </section>
+
+  <footer>
+    <span>MIROIR — 2026</span>
+    <span>Lancement bientôt</span>
+  </footer>
+</div>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.2 });
+document.querySelectorAll('.obs').forEach(el => io.observe(el));
+
+const SUPABASE_URL = 'https://mcueihmixpmqtpwcxfcm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_zk23O7Fli7Qc6Z_xyPyr-w_wSQDMOsE';
+
+const form = document.getElementById('form');
+const input = document.getElementById('mail');
+const err = document.getElementById('err');
+const btn = form.querySelector('.go');
+const btnLabel = btn.querySelector('span');
+const ouvertA = Date.now();
+
+const showError = (msg) => {
+  err.textContent = msg;
+  form.classList.add('failed');
+};
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  form.classList.remove('failed');
+
+  if (document.getElementById('site').value || Date.now() - ouvertA < 2000) {
+    form.classList.add('done');
+    return;
+  }
+
+  const email = input.value.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    showError("Cette adresse n'a pas l'air valide. Vérifie-la.");
+    input.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btnLabel.textContent = 'Une seconde';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email, source: 'waitlist' })
+    });
+
+    if (res.ok || res.status === 409) {
+      form.classList.add('done');
+      return;
+    }
+
+    showError("L'inscription n'est pas passée. Réessaie dans un instant.");
+  } catch {
+    showError('Connexion impossible. Vérifie ton réseau et réessaie.');
+  } finally {
+    btn.disabled = false;
+    btnLabel.textContent = 'Rejoindre';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le début — MIROIR</title>
+<meta name="description" content="Pourquoi je documente douze mois de looksmaxxing en public, et ce que je vais réellement tenter.">
+<meta property="og:title" content="Le début — MIROIR">
+<meta property="og:description" content="Pourquoi je fais ça, et ce que je vais tenter pendant douze mois.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800&family=Onest:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<div class="wrap wrap--lecture">
+  <div class="scene scene--calme" aria-hidden="true">
+    <div class="glow"></div><div class="ring"></div>
+  </div>
+
+  <header class="bar">
+    <a class="mark" href="miroir.html">Miroir</a>
+    <a class="retour" href="methodes.html">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M13.5 8h-11M7 3.5 2.5 8 7 12.5"/>
+      </svg>
+      Toutes les méthodes
+    </a>
+  </header>
+
+  <main style="padding-top:36px">
+
+    <div class="eyebrow rise d1">Avant tout</div>
+    <h1 class="rise d2" style="margin-top:16px">Le début</h1>
+
+    <div class="meta rise d4">
+      <span>Publié le 9 août 2026</span>
+      <span class="sep"></span>
+      <span>3 min de lecture</span>
+    </div>
+
+    <article class="article rise d5" style="margin-top:44px">
+
+      <p>
+        Je vois ma démarche comme une forme d'amélioration de soi, plus
+        complète, plus « holistique » que la simple pratique de la
+        musculation. Améliorer mon apparence physique n'est pas une fin en
+        soi superficielle : c'est un levier vers autre chose. Plus de
+        confiance en moi, plus d'aisance dans mes interactions sociales, et
+        plus de succès sur le plan sexuel et romantique.
+      </p>
+
+      <p>
+        J'appelle ça l'« ascension », un terme employé par la communauté du
+        looksmaxxing. L'idée qu'en travaillant mon physique, je monte vers
+        une version supérieure de moi-même, socialement et
+        psychologiquement.
+      </p>
+
+      <p>
+        Je compte à peu près tout essayer en matière de biohacking
+        pharmaceutique et de méthodes physiques pour transformer mon
+        apparence, y compris la chirurgie plastique. Ça recouvre des
+        pratiques variées : usage de substances pour contrôler mon poids et
+        ma musculature, interventions physiques destinées à modifier
+        certains traits de mon visage.
+      </p>
+
+      <p>
+        Dans cette optique, la douleur, les risques et les efforts extrêmes
+        qu'engage le looksmaxxing sont justifiés tant qu'ils produisent un
+        gain perçu en attractivité, et donc en statut social.
+      </p>
+
+      <p>
+        Je publierai mon contenu et mes avancées au fil de l'eau, sur les
+        réseaux comme sur ce site, <strong>iamlouis.co/miroir</strong>.
+      </p>
+
+      </article>
+
+    <div class="grid grid--2" style="margin-top:64px">
+      <a class="card obs" href="methodes.html">
+        <div class="lab">Continuer</div>
+        <h3>Toutes les méthodes</h3>
+        <p>Les autres sujets du protocole, classés par domaine.</p>
+        <span class="fin">Voir le hub
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+        </span>
+      </a>
+      <a class="card obs" href="miroir.html">
+        <div class="lab">Le projet</div>
+        <h3>Suivre le parcours</h3>
+        <p>Douze mois documentés. Sois prévenu à chaque nouvelle étape.</p>
+        <span class="fin">Rejoindre la liste
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+        </span>
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="pied">
+    <span>MIROIR — 2026</span>
+    <a href="index.html">iamlouis.co</a>
+  </footer>
+</div>
+
+<script>
+const io = new IntersectionObserver((es) => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: .2 });
+document.querySelectorAll('.obs').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
