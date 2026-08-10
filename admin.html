@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard · Louisnny Watches</title>
+<meta name="robots" content="noindex, nofollow"/>
+<meta name="theme-color" content="#FBFBFA"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%230B0B0C'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23FF5C00' stroke-width='2.4'/><path d='M16 12.4V16l2.2 2.2' stroke='%23FF5C00' stroke-width='2.4' stroke-linecap='round' fill='none'/></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ── Dashboard privé ── */
+.adm{max-width:1180px;margin-inline:auto;padding:0 20px 80px;}
+.adm-bar{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:16px 0 22px;margin-bottom:8px;
+}
+.adm-logo{font-size:15px;font-weight:800;letter-spacing:-.03em;}
+.adm-logo i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin:0 5px;}
+.adm-who{margin-left:auto;font-size:12.5px;color:var(--ink-35);}
+
+.tabs{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;}
+.tab{
+  padding:9px 16px;border-radius:var(--r-pill);cursor:pointer;
+  font-family:inherit;font-size:13.5px;font-weight:700;
+  background:var(--surface);border:1px solid var(--line);color:var(--ink-50);
+  transition:all .25s var(--ease-soft);
+}
+.tab:hover{border-color:var(--line-2);color:var(--ink);}
+.tab.is-on{background:var(--ink);border-color:var(--ink);color:#fff;}
+.tab .n{opacity:.55;margin-left:5px;font-weight:600;}
+
+.filters{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
+.chip{
+  padding:6px 13px;border-radius:var(--r-pill);cursor:pointer;
+  font-family:inherit;font-size:12.5px;font-weight:600;
+  background:var(--surface);border:1px solid var(--line);color:var(--ink-50);
+  transition:all .2s var(--ease-soft);
+}
+.chip:hover{border-color:var(--ink-50);}
+.chip.is-on{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent-ink);}
+
+/* Grille des envois */
+.subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;}
+.sub{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  overflow:hidden;box-shadow:var(--sh-sm);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .2s;
+}
+.sub:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
+.sub.is-sel{border-color:var(--accent);box-shadow:var(--sh-accent);}
+.sub-img{
+  width:100%;aspect-ratio:1;object-fit:cover;display:block;
+  background:var(--surface-2);cursor:zoom-in;
+}
+.sub-b{padding:13px 14px;}
+.sub-n{font-size:14.5px;font-weight:800;letter-spacing:-.02em;}
+.sub-s{font-size:12px;color:var(--ink-35);}
+.sub-w{font-size:13px;color:var(--ink-70);margin-top:5px;line-height:1.45;}
+.sub-w b{color:var(--ink);}
+.sub-m{font-size:12.5px;color:var(--ink-50);margin-top:7px;line-height:1.5;font-style:italic;}
+.sub-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;}
+.mini{
+  font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:3px 8px;
+  border-radius:var(--r-pill);background:var(--surface-2);
+  border:1px solid var(--line);color:var(--ink-50);
+}
+.mini.acc{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent-ink);}
+.mini.ok{background:rgba(14,159,110,.08);border-color:rgba(14,159,110,.24);color:var(--success);}
+.sub-acts{display:flex;gap:6px;margin-top:12px;}
+.tiny{
+  flex:1;padding:8px 10px;border-radius:var(--r-xs);cursor:pointer;
+  font-family:inherit;font-size:12px;font-weight:700;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--ink);
+  transition:all .2s var(--ease-soft);
+}
+.tiny:hover{border-color:var(--ink);}
+.tiny.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.tiny.no:hover{border-color:var(--error);color:var(--error);}
+
+/* Barre de sélection */
+.selbar{
+  position:sticky;bottom:14px;z-index:50;margin-top:20px;
+  background:var(--ink);color:#fff;border-radius:var(--r-lg);
+  box-shadow:var(--sh-lg);padding:15px 20px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.selbar-t{font-size:14px;font-weight:700;}
+.selbar-t em{color:var(--accent);font-style:normal;}
+.selbar-d{font-size:12.5px;color:rgba(255,255,255,.55);flex:1;min-width:160px;}
+
+/* Composer */
+.comp{display:grid;gap:14px;}
+.cbox{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:20px 22px;box-shadow:var(--sh-sm);
+}
+.cbox h3{font-size:15px;font-weight:800;letter-spacing:-.025em;margin-bottom:14px;}
+.crow{display:grid;grid-template-columns:96px 1fr;gap:16px;}
+.crow img{width:96px;height:96px;object-fit:cover;border-radius:var(--r-sm);background:var(--surface-2);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.f label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-35);margin-bottom:5px;}
+.f input,.f textarea,.f select{
+  width:100%;padding:10px 12px;border-radius:var(--r-xs);
+  border:1px solid var(--line-2);background:var(--surface-2);
+  font-family:inherit;font-size:14px;color:var(--ink);
+  transition:border-color .2s,background .2s;
+}
+.f textarea{resize:vertical;min-height:74px;line-height:1.6;}
+.f input:focus,.f textarea:focus,.f select:focus{outline:none;border-color:var(--accent);background:var(--surface);}
+.f input[type=number]{text-align:center;font-weight:800;font-size:17px;}
+.tot{
+  display:flex;align-items:center;gap:10px;margin-top:12px;
+  padding-top:12px;border-top:1px solid var(--line);
+}
+.tot-n{font-size:19px;font-weight:800;letter-spacing:-.03em;}
+.tot-n span{font-size:12.5px;color:var(--ink-35);}
+
+.bt{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-md);padding:15px 18px;margin-bottom:10px;box-shadow:var(--sh-sm);
+}
+.bt-t{font-size:15px;font-weight:800;letter-spacing:-.025em;}
+.bt-d{font-size:12.5px;color:var(--ink-50);margin-top:2px;}
+.bt-acts{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap;}
+
+.msg{
+  padding:13px 16px;border-radius:var(--r-sm);font-size:13.5px;
+  line-height:1.6;margin-bottom:16px;display:none;
+}
+.msg.show{display:block;}
+.msg.err{background:rgba(217,45,32,.07);border:1px solid rgba(217,45,32,.24);color:var(--error);}
+.msg.ok{background:rgba(14,159,110,.07);border:1px solid rgba(14,159,110,.24);color:var(--success);}
+.msg.info{background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink-70);}
+
+.empty-s{text-align:center;padding:60px 20px;color:var(--ink-35);font-size:14.5px;}
+
+.login-card{max-width:380px;margin:80px auto;}
+.lightbox{
+  position:fixed;inset:0;z-index:200;background:rgba(11,11,12,.88);
+  display:none;align-items:center;justify-content:center;padding:30px;cursor:zoom-out;
+}
+.lightbox.show{display:flex;}
+.lightbox img{max-width:100%;max-height:100%;border-radius:var(--r-md);}
+
+@media (max-width:760px){
+  .g4{grid-template-columns:1fr 1fr;}
+  .g2{grid-template-columns:1fr;}
+  .crow{grid-template-columns:1fr;}
+  .crow img{width:100%;height:180px;}
+  .bt-acts{margin-left:0;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<div class="canvas"><div class="veil veil-1"></div><div class="veil veil-2"></div></div>
+
+<!-- ══ CONNEXION ══ -->
+<div class="adm" id="login" hidden>
+  <div class="card form-card login-card">
+    <h1 style="font-size:23px;letter-spacing:-.035em;margin-bottom:6px;">Dashboard <em style="color:var(--accent)">privé.</em></h1>
+    <p style="font-size:13.5px;color:var(--ink-50);line-height:1.6;margin-bottom:22px;">
+      Réservé à l'administrateur de Louisnny Watches.
+    </p>
+    <div class="msg err" id="loginMsg"></div>
+    <div class="f" style="margin-bottom:12px;">
+      <label for="lEmail">Email</label>
+      <input type="email" id="lEmail" autocomplete="username"/>
+    </div>
+    <div class="f" style="margin-bottom:18px;">
+      <label for="lPass">Mot de passe</label>
+      <input type="password" id="lPass" autocomplete="current-password"/>
+    </div>
+    <button class="btn btn-accent" id="loginBtn" style="width:100%;">Se connecter</button>
+  </div>
+</div>
+
+<!-- ══ APPLICATION ══ -->
+<div class="adm" id="app" hidden>
+
+  <div class="adm-bar">
+    <span class="adm-logo">Louisnny<i></i>Dashboard</span>
+    <span class="adm-who" id="who"></span>
+    <button class="tiny" style="flex:none;" id="logoutBtn">Déconnexion</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab is-on" data-tab="envois">Envois <span class="n" id="nEnvois"></span></button>
+    <button class="tab" data-tab="composer">Composer la bataille <span class="n" id="nSel"></span></button>
+    <button class="tab" data-tab="batailles">Batailles <span class="n" id="nBat"></span></button>
+  </div>
+
+  <div class="msg" id="msg"></div>
+
+  <!-- ── ENVOIS ── -->
+  <section id="vEnvois">
+    <div class="filters">
+      <button class="chip is-on" data-st="">Tous</button>
+      <button class="chip" data-st="pending">En attente</button>
+      <button class="chip" data-st="featured">Déjà passées</button>
+      <button class="chip" data-st="rejected">Écartées</button>
+      <input type="search" id="q" placeholder="Chercher un pseudo, une marque, un modèle..."
+             style="flex:1;min-width:190px;margin-left:8px;padding:7px 13px;border-radius:var(--r-pill);
+                    border:1px solid var(--line);background:var(--surface);font-family:inherit;font-size:13px;"/>
+      <select id="sort" style="padding:7px 11px;border-radius:var(--r-pill);border:1px solid var(--line);
+                    background:var(--surface);font-family:inherit;font-size:12.5px;font-weight:600;color:var(--ink-50);">
+        <option value="recent">Plus récents</option>
+        <option value="ancien">Plus anciens</option>
+        <option value="marque">Marque A→Z</option>
+        <option value="pseudo">Pseudo A→Z</option>
+      </select>
+      <button class="tiny" style="flex:none;" id="reload">Rafraîchir</button>
+    </div>
+    <div style="font-size:12.5px;color:var(--ink-35);margin-bottom:12px;" id="count"></div>
+    <div class="subs" id="subs"></div>
+    <div class="empty-s" id="subsEmpty" hidden>Aucun envoi pour l'instant.</div>
+
+    <div class="selbar" id="selbar" hidden>
+      <span class="selbar-t"><em id="selN">0</em> / 5 sélectionnées</span>
+      <span class="selbar-d" id="selNames"></span>
+      <button class="btn btn-ghost" id="clearSel">Tout désélectionner</button>
+      <button class="btn btn-accent" id="goCompose">Composer la bataille</button>
+    </div>
+  </section>
+
+  <!-- ── COMPOSER ── -->
+  <section id="vComposer" hidden>
+    <div class="msg info show" id="compHint">
+      Sélectionne cinq montres dans l'onglet Envois pour composer une bataille.
+    </div>
+    <div class="comp" id="comp"></div>
+  </section>
+
+  <!-- ── BATAILLES ── -->
+  <section id="vBatailles" hidden>
+    <div id="bats"></div>
+    <div class="empty-s" id="batsEmpty" hidden>Aucune bataille créée pour l'instant.</div>
+  </section>
+
+</div>
+
+<div class="lightbox" id="lightbox"><img id="lightboxImg" alt=""/></div>
+
+<script type="module">
+// ═══════════════════════════════════════════════════════════
+//  CONFIGURATION SUPABASE
+// ═══════════════════════════════════════════════════════════
+const SUPABASE_URL      = 'https://waskccpbuibybbgxwlca.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_WSkYTnCl-wsPPg1ERtUqAw_dOpr4R-0';
+const BUCKET_IN         = 'montres';     // privé
+const BUCKET_OUT        = 'batailles';   // public
+// ═══════════════════════════════════════════════════════════
+
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const $  = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tierOf = t => t >= 37 ? 'S' : t >= 31 ? 'A' : t >= 24 ? 'B' : t >= 16 ? 'C' : 'D';
+const TIERS = { S:'Pièce de référence', A:'Excellent choix', B:'Solide', C:'Discutable', D:'À revoir' };
+const ROLES = ['La chère','L\'accessible','L\'héritée','L\'atypique','Le joker'];
+
+let state = { subs: [], sel: [], bats: [], filtre: '', q: '', tri: 'recent', urls: {}, rapport: null };
+
+function say(type, text, box = 'msg') {
+  const el = $(box);
+  el.className = 'msg show ' + type;
+  el.innerHTML = text;
+  if (box === 'msg') window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+const clearMsg = () => { $('msg').className = 'msg'; };
+
+/* ══════════ AUTHENTIFICATION ══════════ */
+async function boot() {
+  const { data } = await sb.auth.getSession();
+  if (data.session) { await enter(data.session); }
+  else { $('login').hidden = false; }
+}
+
+async function enter(session) {
+  $('login').hidden = true;
+  $('app').hidden = false;
+  $('who').textContent = session.user.email;
+  const restaure = restaurerBrouillon();
+  await Promise.all([loadSubs(), loadBats()]);
+  if (restaure) { $('nSel').textContent = '(' + state.sel.length + ')'; }
+}
+
+$('loginBtn').addEventListener('click', async () => {
+  const email = $('lEmail').value.trim();
+  const pass  = $('lPass').value;
+  $('loginMsg').className = 'msg err';
+  if (!email || !pass) { say('err', 'Renseigne ton email et ton mot de passe.', 'loginMsg'); return; }
+
+  $('loginBtn').disabled = true;
+  $('loginBtn').textContent = 'Connexion...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  $('loginBtn').disabled = false;
+  $('loginBtn').textContent = 'Se connecter';
+
+  if (error) { say('err', 'Connexion refusée : ' + esc(error.message), 'loginMsg'); return; }
+  await enter(data.session);
+});
+$('lPass').addEventListener('keydown', e => { if (e.key === 'Enter') $('loginBtn').click(); });
+
+$('logoutBtn').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  location.reload();
+});
+
+/* ══════════ ONGLETS ══════════ */
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('is-on', x === t));
+  const v = t.dataset.tab;
+  $('vEnvois').hidden    = v !== 'envois';
+  $('vComposer').hidden  = v !== 'composer';
+  $('vBatailles').hidden = v !== 'batailles';
+  if (v === 'composer') renderComposer();
+}));
+const goTab = name => document.querySelector(`.tab[data-tab="${name}"]`).click();
+
+/* ══════════ ENVOIS ══════════ */
+async function loadSubs() {
+  const { data, error } = await sb.rpc('admin_submissions', { p_status: state.filtre || null });
+  if (error)         return say('err', 'Lecture impossible : ' + esc(error.message));
+  if (!data.ok)      return say('err', data.error === 'forbidden'
+      ? "Ce compte n'est pas déclaré administrateur. Lance la dernière requête de <code>supabase-admin.sql</code>."
+      : esc(data.error));
+
+  state.subs = data.rows || [];
+  const c = data.compteurs || {};
+  $('nEnvois').textContent = '(' + (c.pending || 0) + ')';
+  await renderSubs();
+}
+
+async function signedUrl(path) {
+  if (state.urls[path]) return state.urls[path];
+  const { data } = await sb.storage.from(BUCKET_IN).createSignedUrl(path, 3600);
+  state.urls[path] = data?.signedUrl || '';
+  return state.urls[path];
+}
+
+function subsFiltres() {
+  const q = state.q.trim().toLowerCase();
+  let L = state.subs.filter(s => !q || [s.pseudo, s.brand, s.model, s.social, s.message]
+    .some(v => (v || '').toLowerCase().includes(q)));
+  const T = {
+    recent: (a,b) => new Date(b.created_at) - new Date(a.created_at),
+    ancien: (a,b) => new Date(a.created_at) - new Date(b.created_at),
+    marque: (a,b) => (a.brand||'').localeCompare(b.brand||'', 'fr'),
+    pseudo: (a,b) => (a.pseudo||'').localeCompare(b.pseudo||'', 'fr'),
+  };
+  return L.sort(T[state.tri] || T.recent);
+}
+
+async function renderSubs() {
+  const box = $('subs');
+  const L = subsFiltres();
+  $('subsEmpty').hidden = L.length > 0;
+  $('count').textContent = L.length === state.subs.length
+    ? `${L.length} envoi${L.length > 1 ? 's' : ''}`
+    : `${L.length} sur ${state.subs.length} envoi${state.subs.length > 1 ? 's' : ''}`;
+  box.innerHTML = L.map(s => {
+    const on = state.sel.some(x => x.id === s.id);
+    return `
+    <article class="sub${on ? ' is-sel' : ''}" data-id="${s.id}">
+      <img class="sub-img" data-path="${esc(s.image_path)}" alt="Montre de ${esc(s.pseudo)}"/>
+      <div class="sub-b">
+        <div class="sub-n">${esc(s.pseudo)}</div>
+        ${s.social ? `<div class="sub-s">${esc(s.social)}</div>` : ''}
+        <div class="sub-w"><b>${esc(s.brand)}</b>${s.model ? ' · ' + esc(s.model) : ''}</div>
+        ${s.message ? `<div class="sub-m">« ${esc(s.message)} »</div>` : ''}
+        <div class="sub-tags">
+          ${s.price ? `<span class="mini">${esc(s.price)}</span>` : ''}
+          <span class="mini${s.status === 'featured' ? ' ok' : s.status === 'pending' ? ' acc' : ''}">${esc(s.status)}</span>
+          <span class="mini">${new Date(s.created_at).toLocaleDateString('fr-FR')}</span>
+        </div>
+        <div class="sub-acts">
+          <button class="tiny pick${on ? ' on' : ''}">${on ? 'Sélectionnée' : 'Sélectionner'}</button>
+          <button class="tiny no rej" style="flex:none;" title="Écarter cet envoi">✕</button>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+
+  // Photos : URL signée valable une heure
+  for (const img of box.querySelectorAll('.sub-img')) {
+    signedUrl(img.dataset.path).then(u => { if (u) img.src = u; });
+  }
+
+  box.querySelectorAll('.sub').forEach(card => {
+    const s = state.subs.find(x => x.id === card.dataset.id);
+    if (!s) return;
+    card.querySelector('.pick').addEventListener('click', () => toggle(s));
+    card.querySelector('.rej').addEventListener('click', () => setStatus(s, 'rejected'));
+    card.querySelector('.sub-img').addEventListener('click', e => {
+      if (!e.target.src) return;
+      $('lightboxImg').src = e.target.src;
+      $('lightbox').classList.add('show');
+    });
+  });
+  refreshSelbar();
+}
+
+$('lightbox').addEventListener('click', () => $('lightbox').classList.remove('show'));
+
+function toggle(s) {
+  const i = state.sel.findIndex(x => x.id === s.id);
+  if (i >= 0) state.sel.splice(i, 1);
+  else {
+    if (state.sel.length >= 5) { say('err', 'Cinq montres maximum. Désélectionne-en une d\'abord.'); return; }
+    state.sel.push({
+      ...s,
+      role_label: ROLES[state.sel.length] || '',
+      score_design: 0, score_value: 0, score_wear: 0, score_x: 0,
+      verdict: '', alternative: '',
+    });
+  }
+  clearMsg();
+  sauverBrouillon();
+  renderSubs();
+}
+
+function refreshSelbar() {
+  $('selbar').hidden = state.sel.length === 0;
+  $('selN').textContent = state.sel.length;
+  $('nSel').textContent = state.sel.length ? '(' + state.sel.length + ')' : '';
+  $('selNames').textContent = state.sel.map(s => s.pseudo).join(', ');
+  $('goCompose').disabled = state.sel.length !== 5;
+}
+
+$('clearSel').addEventListener('click', () => { state.sel = []; effacerBrouillon(); renderSubs(); });
+$('goCompose').addEventListener('click', () => goTab('composer'));
+$('reload').addEventListener('click', () => { state.urls = {}; loadSubs(); });
+
+let tQ;
+$('q').addEventListener('input', e => {
+  state.q = e.target.value;
+  clearTimeout(tQ); tQ = setTimeout(renderSubs, 160);
+});
+$('sort').addEventListener('change', e => { state.tri = e.target.value; renderSubs(); });
+
+document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('.chip').forEach(x => x.classList.toggle('is-on', x === c));
+  state.filtre = c.dataset.st;
+  loadSubs();
+}));
+
+async function setStatus(s, status) {
+  const { data, error } = await sb.rpc('admin_set_status', { p_id: s.id, p_status: status });
+  if (error || !data.ok) return say('err', 'Impossible de changer le statut.');
+  loadSubs();
+}
+
+/* ══════════ COMPOSER ══════════ */
+let tAuto;
+const auto = () => { clearTimeout(tAuto); tAuto = setTimeout(sauverBrouillon, 500); };
+
+function renderComposer() {
+  const box = $('comp');
+  if (state.sel.length !== 5) {
+    $('compHint').className = 'msg info show';
+    $('compHint').innerHTML = `Sélectionne <strong>cinq</strong> montres dans l'onglet Envois. Tu en as ${state.sel.length}.`;
+    box.innerHTML = '';
+    return;
+  }
+  $('compHint').className = 'msg';
+
+  const num  = state.nextNum || 1;
+  const mois = new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+  box.innerHTML = `
+  <div class="cbox">
+    <h3>La bataille</h3>
+    <div class="g2" style="margin-bottom:12px;">
+      <div class="f"><label>Numéro</label><input type="number" id="bNum" value="${num}" min="1"/></div>
+      <div class="f"><label>Mois affiché</label><input type="text" id="bMois" value="${esc(mois.charAt(0).toUpperCase() + mois.slice(1))}"/></div>
+    </div>
+    <div class="f" style="margin-bottom:12px;">
+      <label>Chapô (optionnel)</label>
+      <input type="text" id="bIntro" placeholder="Cinq montres, cinq histoires. Ma note est mon avis, le lot c'est le vôtre."/>
+    </div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div class="f"><label>Titre du lot</label><input type="text" id="bLot" placeholder="A Man and His Watch, de Matt Hranek"/></div>
+      <div class="f"><label>Lien de la vidéo</label><input type="text" id="bVideo" placeholder="https://www.tiktok.com/@louisnny.watches"/></div>
+    </div>
+    <div class="f" style="margin-bottom:12px;">
+      <label>Description du lot</label>
+      <input type="text" id="bLotD" placeholder="Le livre culte : 76 montres, 76 histoires."/>
+    </div>
+    <div class="g2">
+      <div class="f"><label>Durée du vote (jours)</label><input type="number" id="bJours" value="8" min="1" max="60"/></div>
+      <div class="f"><label>Identifiant d'URL</label><input type="text" id="bSlug" value="bataille-${String(num).padStart(2,'0')}"/></div>
+    </div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+                font-size:12px;color:var(--ink-35);opacity:.45;transition:opacity .3s;" id="autosave">
+      Tes notes et verdicts sont enregistrés automatiquement dans ce navigateur.
+    </div>
+  </div>
+
+  ${state.sel.map((s, i) => `
+  <div class="cbox" data-i="${i}">
+    <h3>${i + 1}. ${esc(s.pseudo)} · ${esc(s.brand)}</h3>
+    <div class="crow">
+      <img data-path="${esc(s.image_path)}" alt=""/>
+      <div>
+        <div class="g2" style="margin-bottom:12px;">
+          <div class="f"><label>Nom affiché</label><input class="fName" type="text" value="${esc(s.pseudo)}"/></div>
+          <div class="f"><label>Rôle dans le casting</label><input class="fRole" type="text" value="${esc(s.role_label)}"/></div>
+        </div>
+        <div class="g4">
+          <div class="f"><label>Design</label><input class="sc" data-k="score_design" type="number" min="0" max="10" value="${s.score_design}"/></div>
+          <div class="f"><label>Qualité-prix</label><input class="sc" data-k="score_value" type="number" min="0" max="10" value="${s.score_value}"/></div>
+          <div class="f"><label>Porté</label><input class="sc" data-k="score_wear" type="number" min="0" max="10" value="${s.score_wear}"/></div>
+          <div class="f"><label>Facteur X</label><input class="sc" data-k="score_x" type="number" min="0" max="10" value="${s.score_x}"/></div>
+        </div>
+        <div class="tot">
+          <span class="tot-n"><span class="t">0</span><span>/40</span></span>
+          <span class="tier-badge sm tier-D badge">D</span>
+          <span class="sub-s tname">À revoir</span>
+        </div>
+      </div>
+    </div>
+    <div class="f" style="margin-top:14px;">
+      <label>Ton verdict</label>
+      <textarea class="fVerdict" placeholder="Ce que tu dis à l'écran sur cette montre.">${esc(s.verdict)}</textarea>
+    </div>
+    <div class="f alt" style="margin-top:12px;" hidden>
+      <label>Alternative au même budget (obligatoire en tier D)</label>
+      <input class="fAlt" type="text" value="${esc(s.alternative)}" placeholder="Pour ce budget : une Seiko 5 SNK809 ou une Orient Bambino."/>
+    </div>
+  </div>`).join('')}
+
+  <div class="cbox" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+    <div style="flex:1;min-width:200px;font-size:13px;color:var(--ink-50);line-height:1.6;">
+      « Enregistrer » crée la bataille sans la rendre publique.
+      « Publier » copie les cinq photos vers le stockage public et ouvre les votes.
+    </div>
+    <button class="btn btn-ghost" id="saveDraft">Enregistrer en brouillon</button>
+    <button class="btn btn-accent" id="publish">Publier et ouvrir les votes</button>
+  </div>`;
+
+  // Photos
+  box.querySelectorAll('img[data-path]').forEach(img => {
+    signedUrl(img.dataset.path).then(u => { if (u) img.src = u; });
+  });
+
+  // Notes en direct
+  box.querySelectorAll('.cbox[data-i]').forEach(card => {
+    const i = +card.dataset.i;
+    const sync = () => {
+      card.querySelectorAll('.sc').forEach(inp => {
+        state.sel[i][inp.dataset.k] = Math.max(0, Math.min(10, +inp.value || 0));
+      });
+      const s = state.sel[i];
+      const tot = s.score_design + s.score_value + s.score_wear + s.score_x;
+      const tier = tierOf(tot);
+      card.querySelector('.t').textContent = tot;
+      const b = card.querySelector('.badge');
+      b.textContent = tier;
+      b.className = 'tier-badge sm badge tier-' + tier;
+      card.querySelector('.tname').textContent = TIERS[tier];
+      card.querySelector('.alt').hidden = tier !== 'D';
+    };
+    card.querySelectorAll('.sc').forEach(inp => inp.addEventListener('input', () => { sync(); auto(); }));
+    card.querySelector('.fName')   .addEventListener('input', e => { state.sel[i].display_name = e.target.value; auto(); });
+    card.querySelector('.fRole')   .addEventListener('input', e => { state.sel[i].role_label   = e.target.value; auto(); });
+    card.querySelector('.fVerdict').addEventListener('input', e => { state.sel[i].verdict      = e.target.value; auto(); });
+    card.querySelector('.fAlt')    .addEventListener('input', e => { state.sel[i].alternative  = e.target.value; auto(); });
+    sync();
+  });
+
+  // Champs de la bataille : eux aussi sauvegardés
+  ['bNum','bMois','bIntro','bLot','bLotD','bVideo','bJours','bSlug']
+    .forEach(k => $(k)?.addEventListener('input', auto));
+
+  // Restauration des champs du brouillon
+  if (state.brouillonMeta) {
+    Object.entries(state.brouillonMeta).forEach(([k, v]) => { if ($(k) && v) $(k).value = v; });
+    state.brouillonMeta = null;
+  }
+
+  $('saveDraft').addEventListener('click', () => publish('draft'));
+  $('publish')  .addEventListener('click', () => publish('voting'));
+}
+
+/* ══════════ PUBLICATION ══════════ */
+async function publish(status) {
+  const slug = $('bSlug').value.trim();
+  const num  = +$('bNum').value || 1;
+  if (!slug) return say('err', "Renseigne l'identifiant d'URL.");
+
+  const manquants = state.sel.filter(s => !s.verdict.trim()).length;
+  if (status === 'voting' && manquants) {
+    return say('err', `${manquants} verdict${manquants > 1 ? 's' : ''} encore vide${manquants > 1 ? 's' : ''}. Une bataille publiée sans verdict n'a aucun intérêt.`);
+  }
+  const tierDsansAlt = state.sel.filter(s =>
+    tierOf(s.score_design + s.score_value + s.score_wear + s.score_x) === 'D' && !s.alternative.trim());
+  if (status === 'voting' && tierDsansAlt.length) {
+    return say('err', "Une montre en tier D sans alternative proposée. C'est la règle du format : jamais de tier D sans dire quoi acheter à la place.");
+  }
+
+  const btn = status === 'voting' ? $('publish') : $('saveDraft');
+  btn.disabled = true;
+  const label = btn.textContent;
+  btn.textContent = 'Copie des photos...';
+
+  try {
+    // 1. Copier les 5 photos du bucket privé vers le bucket public
+    const entries = [];
+    for (let i = 0; i < state.sel.length; i++) {
+      const s = state.sel[i];
+      const ext  = (s.image_path.split('.').pop() || 'jpg').toLowerCase();
+      const dest = `b${String(num).padStart(2, '0')}/${i + 1}.${ext}`;
+
+      const dl = await sb.storage.from(BUCKET_IN).download(s.image_path);
+      if (dl.error) throw new Error('Photo ' + (i + 1) + ' illisible : ' + dl.error.message);
+
+      const up = await sb.storage.from(BUCKET_OUT)
+        .upload(dest, dl.data, { upsert: true, contentType: dl.data.type || 'image/jpeg' });
+      if (up.error) throw new Error('Copie de la photo ' + (i + 1) + ' impossible : ' + up.error.message);
+
+      entries.push({
+        submission_id: s.id,
+        display_name: s.display_name || s.pseudo,
+        social: s.social, role_label: s.role_label,
+        brand: s.brand, model: s.model, price: s.price,
+        image_path: dest,
+        score_design: s.score_design, score_value: s.score_value,
+        score_wear: s.score_wear, score_x: s.score_x,
+        verdict: s.verdict, alternative: s.alternative,
+      });
+      btn.textContent = `Copie des photos... ${i + 1}/5`;
+    }
+
+    // 2. Créer la bataille
+    btn.textContent = 'Publication...';
+    const payload = {
+      slug, number: num, status,
+      month_label: $('bMois').value.trim(),
+      intro: $('bIntro').value.trim(),
+      prize_title: $('bLot').value.trim(),
+      prize_desc: $('bLotD').value.trim(),
+      video_url: $('bVideo').value.trim(),
+      days: +$('bJours').value || 8,
+      entries,
+    };
+    const { data, error } = await sb.rpc('admin_publish_battle', { p: payload });
+    if (error)    throw new Error(error.message);
+    if (!data.ok) throw new Error(data.error);
+
+    state.sel = [];
+    effacerBrouillon();
+    await Promise.all([loadSubs(), loadBats()]);
+    goTab('batailles');
+    say('ok', status === 'voting'
+      ? `Bataille publiée. Elle est en ligne sur <a href="bataille.html?b=${esc(slug)}" target="_blank"><strong>bataille.html?b=${esc(slug)}</strong></a> et les votes sont ouverts.`
+      : `Brouillon enregistré. Il n'est pas encore visible du public, tu peux l'ouvrir depuis l'onglet Batailles.`);
+
+  } catch (e) {
+    say('err', 'Publication interrompue : ' + esc(e.message));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+  }
+}
+
+/* ══════════ BATAILLES ══════════ */
+async function loadBats() {
+  const { data, error } = await sb.rpc('admin_battles');
+  if (error || !data?.ok) return;
+  state.bats = data.rows || [];
+  state.nextNum = data.prochain_numero || 1;
+  $('nBat').textContent = state.bats.length ? '(' + state.bats.length + ')' : '';
+
+  $('batsEmpty').hidden = state.bats.length > 0;
+  $('bats').innerHTML = state.bats.map(b => {
+    const LIB = { draft:'Brouillon', voting:'Votes ouverts', closed:'Clôturée' };
+    return `
+    <div class="bt" data-slug="${esc(b.slug)}">
+      <div>
+        <div class="bt-t">Bataille #${String(b.number).padStart(2,'0')} · ${esc(b.month_label)}</div>
+        <div class="bt-d">${LIB[b.status]} · ${b.nb_montres} montres · ${b.nb_votes} vote${b.nb_votes > 1 ? 's' : ''}${b.voting_closes_at && b.status === 'voting' ? ' · clôture le ' + new Date(b.voting_closes_at).toLocaleDateString('fr-FR') : ''}</div>
+      </div>
+      <div class="bt-acts">
+        <a class="tiny" style="flex:none;text-decoration:none;text-align:center;" href="bataille.html?b=${esc(b.slug)}" target="_blank">Voir</a>
+        ${b.status === 'draft'  ? '<button class="tiny open" style="flex:none;">Ouvrir les votes</button>' : ''}
+        ${b.status === 'voting' ? '<button class="tiny close" style="flex:none;">Clôturer</button>' : ''}
+        ${b.status !== 'draft' ? '<button class="tiny pdf" style="flex:none;">Résumé PDF</button>' : ''}
+        ${b.status !== 'draft' ? '<button class="tiny csv" style="flex:none;">CSV votants</button>' : ''}
+        ${b.status === 'closed' ? '<button class="tiny carte" style="flex:none;">Carte de partage</button>' : ''}
+        ${b.nb_votes === 0 ? '<button class="tiny no del" style="flex:none;">Supprimer</button>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  $('bats').querySelectorAll('.bt').forEach(row => {
+    const slug = row.dataset.slug;
+    row.querySelector('.open') ?.addEventListener('click', async () => {
+      const j = prompt('Durée du vote, en jours ?', '8'); if (!j) return;
+      const { data } = await sb.rpc('admin_open_votes', { p_slug: slug, p_days: +j || 8 });
+      if (data?.ok) { say('ok', 'Votes ouverts.'); loadBats(); }
+    });
+    row.querySelector('.close')?.addEventListener('click', async () => {
+      if (!confirm('Clôturer les votes ? Cette action désigne le gagnant.')) return;
+      const { data } = await sb.rpc('admin_close_battle', { p_slug: slug });
+      if (data?.ok) {
+        const p = data.public_winner, v = data.best_verdict;
+        say('ok', `Bataille clôturée.<br/><strong>Choix du public :</strong> ${esc(p?.name)} (${esc(p?.brand)}), ${p?.votes} votes.
+                   <br/><strong>Meilleur verdict :</strong> ${esc(v?.name)}, ${v?.score}/40 tier ${v?.tier}.
+                   ${data.divergence ? '<br/>Le public n\'a pas suivi ton verdict. Bonne matière pour le short d\'annonce.' : ''}
+                   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+                     <button class="tiny" style="flex:none;" onclick="window.__pdf('${esc(slug)}')">Télécharger le résumé PDF</button>
+                     <button class="tiny" style="flex:none;" onclick="window.__csv('${esc(slug)}')">Exporter les votants (CSV)</button>
+                     <button class="tiny" style="flex:none;" onclick="window.__carte('${esc(slug)}')">Carte de partage</button>
+                   </div>`);
+        state.rapport = null;
+        loadBats();
+      }
+    });
+    row.querySelector('.pdf')  ?.addEventListener('click', () => { state.rapport = null; pdfRapport(slug); });
+    row.querySelector('.csv')  ?.addEventListener('click', () => { state.rapport = null; csvVotants(slug); });
+    row.querySelector('.carte')?.addEventListener('click', () => { state.rapport = null; cartePartage(slug); });
+    row.querySelector('.del')  ?.addEventListener('click', async () => {
+      if (!confirm('Supprimer définitivement cette bataille ?')) return;
+      const { data } = await sb.rpc('admin_delete_battle', { p_slug: slug });
+      if (data?.ok) { say('ok', 'Bataille supprimée.'); loadBats(); }
+      else say('err', data?.error === 'bataille_avec_votes' ? 'Impossible : cette bataille a déjà reçu des votes.' : 'Suppression impossible.');
+    });
+  });
+}
+
+
+/* ══════════ AUTO-SAUVEGARDE DU COMPOSER ══════════ */
+const BROUILLON = 'louisnny_composer_v1';
+
+function sauverBrouillon() {
+  try {
+    if (!state.sel.length) { localStorage.removeItem(BROUILLON); return; }
+    const meta = {};
+    ['bNum','bMois','bIntro','bLot','bLotD','bVideo','bJours','bSlug'].forEach(k => {
+      const el = $(k); if (el) meta[k] = el.value;
+    });
+    localStorage.setItem(BROUILLON, JSON.stringify({ sel: state.sel, meta, le: Date.now() }));
+    const t = $('autosave');
+    if (t) {
+      t.textContent = 'Enregistré à ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+      t.style.opacity = 1;
+      clearTimeout(t._h); t._h = setTimeout(() => t.style.opacity = .45, 1600);
+    }
+  } catch {}
+}
+
+function lireBrouillon() {
+  try { return JSON.parse(localStorage.getItem(BROUILLON) || 'null'); } catch { return null; }
+}
+const effacerBrouillon = () => { try { localStorage.removeItem(BROUILLON); } catch {} };
+
+function restaurerBrouillon() {
+  const b = lireBrouillon();
+  if (!b || !b.sel || b.sel.length !== 5) return false;
+  state.sel = b.sel;
+  state.brouillonMeta = b.meta || {};
+  const quand = new Date(b.le).toLocaleString('fr-FR', {day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
+  say('info', `Brouillon de bataille restauré, enregistré le ${quand}. <button class="tiny" style="flex:none;margin-left:8px;" onclick="window.__viderBrouillon()">Repartir de zéro</button>`);
+  return true;
+}
+window.__viderBrouillon = () => { effacerBrouillon(); state.sel = []; clearMsg(); renderSubs(); renderComposer(); };
+
+/* ══════════ RAPPORT DE CLÔTURE ══════════ */
+async function rapport(slug) {
+  if (state.rapport && state.rapport.bataille.slug === slug) return state.rapport;
+  const { data, error } = await sb.rpc('admin_battle_report', { p_slug: slug });
+  if (error || !data?.ok) { say('err', 'Rapport indisponible : ' + esc(error?.message || data?.error || '')); return null; }
+  state.rapport = data;
+  return data;
+}
+
+function telecharger(nom, contenu, type) {
+  const url = URL.createObjectURL(new Blob([contenu], { type }));
+  const a = document.createElement('a');
+  a.href = url; a.download = nom; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+async function csvVotants(slug) {
+  const r = await rapport(slug); if (!r) return;
+  const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const lignes = [['email','date du vote','a voté pour','marque'].map(q).join(';')];
+  (r.votants || []).forEach(v => lignes.push([v.email, v.created_at, v.vote_pour, v.brand].map(q).join(';')));
+  // BOM pour qu'Excel lise correctement les accents
+  telecharger(`votants-${slug}.csv`, '﻿' + lignes.join('\r\n'), 'text/csv;charset=utf-8');
+  say('ok', `${(r.votants || []).length} votant${(r.votants||[]).length > 1 ? 's' : ''} exporté${(r.votants||[]).length > 1 ? 's' : ''}.`);
+}
+
+async function pdfRapport(slug) {
+  const r = await rapport(slug); if (!r) return;
+  const b = r.bataille, pub = r.choix_public, best = r.meilleur_verdict;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const W = 595.28, M = 46;
+  let y = 0;
+
+  const INK = [11,11,12], GREY = [110,110,118], ACC = [255,92,0], LINE = [228,228,226];
+  const txt = (t, x, yy, size, style = 'normal', color = INK) => {
+    doc.setFont('helvetica', style); doc.setFontSize(size); doc.setTextColor(...color);
+    doc.text(String(t), x, yy);
+  };
+  const saut = (h = 0) => { if (y + h > 790) { doc.addPage(); y = 60; } };
+
+  // ── Bandeau ──
+  doc.setFillColor(...INK); doc.rect(0, 0, W, 108, 'F');
+  txt(`BATAILLE #${String(b.number).padStart(2,'0')}`, M, 46, 22, 'bold', [255,255,255]);
+  txt(b.month_label || '', M, 68, 12, 'normal', [190,190,196]);
+  txt('louisnny watches', W - M - doc.getTextWidth('louisnny watches') * 1.0, 46, 11, 'bold', [255,92,0]);
+  txt(`Rapport généré le ${r.genere_le}`, M, 90, 9, 'normal', [150,150,158]);
+  y = 148;
+
+  // ── Les deux titres ──
+  txt('LE PALMARÈS', M, y, 10, 'bold', ACC); y += 20;
+
+  const carte = (x, w, titre, nom, detail, stat) => {
+    doc.setDrawColor(...LINE); doc.setLineWidth(.8);
+    doc.roundedRect(x, y, w, 88, 6, 6, 'S');
+    txt(titre, x + 14, y + 20, 8, 'bold', ACC);
+    txt(nom || '—', x + 14, y + 42, 15, 'bold');
+    txt(detail || '', x + 14, y + 59, 9.5, 'normal', GREY);
+    txt(stat || '', x + 14, y + 76, 9.5, 'bold');
+  };
+  const w2 = (W - M * 2 - 14) / 2;
+  carte(M, w2, 'CHOIX DU PUBLIC · REMPORTE LE LOT',
+        pub?.display_name, [pub?.brand, pub?.model].filter(Boolean).join(' · '),
+        `${pub?.votes ?? 0} votes${pub?.social ? '   ·   ' + pub.social : ''}`);
+  carte(M + w2 + 14, w2, 'MEILLEUR VERDICT · MA NOTE',
+        best?.display_name, [best?.brand, best?.model].filter(Boolean).join(' · '),
+        `${best?.score_total ?? 0}/40   ·   tier ${best?.tier ?? ''}`);
+  y += 106;
+
+  if (pub && best && pub.display_name !== best.display_name) {
+    doc.setFillColor(255, 244, 237); doc.roundedRect(M, y, W - M * 2, 34, 5, 5, 'F');
+    txt(`Divergence : le public n'a pas suivi le verdict. Bonne matière pour le short d'annonce.`,
+        M + 12, y + 21, 9.5, 'normal', [180,70,0]);
+    y += 50;
+  } else { y += 6; }
+
+  // ── Classement du public ──
+  saut(90);
+  txt('CLASSEMENT DU PUBLIC', M, y, 10, 'bold', ACC); y += 18;
+  const cols = [M, M + 26, M + 190, M + 300, M + 360, M + 425, M + 480];
+  doc.setFillColor(246,246,244); doc.rect(M, y - 11, W - M * 2, 22, 'F');
+  ['#','Participant','Montre','Votes','%','Note','Tier'].forEach((h, i) => txt(h, cols[i] + 5, y + 4, 8, 'bold', GREY));
+  y += 22;
+
+  (r.classement_public || []).forEach((e, i) => {
+    saut(26);
+    if (e.gagnante) { doc.setFillColor(255,246,240); doc.rect(M, y - 11, W - M * 2, 22, 'F'); }
+    txt(i + 1, cols[0] + 5, y + 4, 9.5, e.gagnante ? 'bold' : 'normal');
+    txt(e.display_name, cols[1] + 5, y + 4, 9.5, e.gagnante ? 'bold' : 'normal');
+    txt(`${e.brand}${e.model ? ' ' + e.model : ''}`.slice(0, 30), cols[2] + 5, y + 4, 9, 'normal', GREY);
+    txt(e.votes, cols[3] + 5, y + 4, 9.5, 'bold');
+    txt(e.pourcentage + ' %', cols[4] + 5, y + 4, 9.5, 'normal', GREY);
+    txt(e.score_total + '/40', cols[5] + 5, y + 4, 9.5, 'normal');
+    txt(e.tier, cols[6] + 5, y + 4, 9.5, 'bold', ACC);
+    doc.setDrawColor(...LINE); doc.setLineWidth(.4);
+    doc.line(M, y + 11, W - M, y + 11);
+    y += 22;
+  });
+  y += 18;
+
+  // ── Les verdicts ──
+  saut(70);
+  txt('LES VERDICTS', M, y, 10, 'bold', ACC); y += 20;
+  (r.classement_public || []).slice().sort((a, c) => a.position - c.position).forEach(e => {
+    saut(80);
+    txt(`${e.position}. ${e.display_name} · ${e.brand}${e.model ? ' ' + e.model : ''}`, M, y, 11, 'bold');
+    txt(`${e.score_total}/40 · tier ${e.tier}${e.role_label ? ' · ' + e.role_label : ''}${e.price ? ' · ' + e.price : ''}`,
+        M, y + 15, 8.5, 'normal', GREY);
+    y += 30;
+    if (e.verdict) {
+      doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...INK);
+      const L = doc.splitTextToSize(e.verdict, W - M * 2 - 10);
+      L.forEach(l => { saut(16); doc.text(l, M + 8, y); y += 14; });
+    }
+    if (e.alternative) {
+      doc.setFontSize(9); doc.setTextColor(180,70,0);
+      const L = doc.splitTextToSize('À la place : ' + e.alternative, W - M * 2 - 10);
+      L.forEach(l => { saut(15); doc.text(l, M + 8, y); y += 13; });
+    }
+    y += 12;
+  });
+
+  // ── Chiffres ──
+  saut(90);
+  y += 6;
+  txt('LES CHIFFRES', M, y, 10, 'bold', ACC); y += 20;
+  txt(`Total des votes : ${b.total_votes}`, M, y, 10); y += 16;
+  txt(`Votants uniques : ${(r.votants || []).length}`, M, y, 10); y += 16;
+  if (b.voting_opens_at)  { txt(`Ouverture : ${new Date(b.voting_opens_at).toLocaleString('fr-FR')}`, M, y, 10); y += 16; }
+  if (b.voting_closes_at) { txt(`Clôture : ${new Date(b.voting_closes_at).toLocaleString('fr-FR')}`, M, y, 10); y += 16; }
+  if (b.prize_title)      { txt(`Lot : ${b.prize_title}`, M, y, 10); y += 16; }
+  if ((r.votes_par_jour || []).length) {
+    y += 6; txt('Votes par jour', M, y, 9, 'bold', GREY); y += 14;
+    r.votes_par_jour.forEach(d => { saut(14); txt(`${d.jour}   ${'|'.repeat(Math.min(40, d.n))}  ${d.n}`, M, y, 8.5, 'normal', GREY); y += 12; });
+  }
+
+  // ── Pieds de page ──
+  const n = doc.getNumberOfPages();
+  for (let i = 1; i <= n; i++) {
+    doc.setPage(i);
+    txt(`Bataille #${String(b.number).padStart(2,'0')} · ${b.month_label} · iamlouis.co`, M, 812, 8, 'normal', GREY);
+    txt(`${i}/${n}`, W - M - 16, 812, 8, 'normal', GREY);
+  }
+
+  doc.save(`bataille-${String(b.number).padStart(2,'0')}-rapport.pdf`);
+  say('ok', 'Rapport PDF téléchargé.');
+}
+
+/* ══════════ CARTE DE PARTAGE ══════════ */
+async function cartePartage(slug) {
+  const r = await rapport(slug); if (!r) return;
+  const b = r.bataille, g = r.choix_public;
+  const cls = (r.classement_public || []);
+  const W = 1080, H = 1350, M = 90;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  const F = (w, s, f = '"Plus Jakarta Sans", Poppins, Arial') => `${w} ${s}px ${f}`;
+
+  // Fond
+  x.fillStyle = '#FBFBFA'; x.fillRect(0, 0, W, H);
+  x.strokeStyle = '#F2F1EF'; x.lineWidth = 1;
+  for (let i = 0; i < W; i += 90) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, H); x.stroke(); }
+  for (let i = 0; i < H; i += 90) { x.beginPath(); x.moveTo(0, i); x.lineTo(W, i); x.stroke(); }
+
+  // En-tête
+  x.fillStyle = '#0B0B0C'; x.font = F(800, 62);
+  x.fillText(`Bataille #${String(b.number).padStart(2,'0')}`, M, 158);
+  x.fillStyle = '#6E6E76'; x.font = F(500, 33);
+  x.fillText(`${b.month_label || ''}   ·   ${b.total_votes} votes`, M, 208);
+
+  // Photo de la gagnante, si le navigateur accepte de nous la donner
+  const gag = cls.find(e => e.gagnante) || cls[0];
+  const chemin = state.bats.find(z => z.slug === slug)?.entries
+      ?.find(e => e.position === gag?.position)?.image_path;
+  let photo = null;
+  if (chemin) {
+    photo = await new Promise(res => {
+      const im = new Image(); im.crossOrigin = 'anonymous';
+      im.onload = () => res(im); im.onerror = () => res(null);
+      im.src = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_OUT}/${chemin}`;
+    });
+  }
+
+  let y = 258;
+  if (photo) {
+    const s2 = Math.min(photo.width, photo.height);
+    x.save(); x.beginPath(); x.roundRect(M, y, W - M * 2, 620, 26); x.clip();
+    x.drawImage(photo, (photo.width - s2) / 2, (photo.height - s2) / 2, s2, s2, M, y, W - M * 2, 620);
+    x.restore();
+    y += 620 + 28;
+  }
+
+  // Bloc gagnante
+  const hb = 232;
+  x.fillStyle = '#0B0B0C'; x.beginPath(); x.roundRect(M, y, W - M * 2, hb, 26); x.fill();
+  x.fillStyle = '#FF5C00'; x.font = F(700, 24);
+  x.fillText('CHOIX DU PUBLIC · REMPORTE LE LOT', M + 40, y + 58);
+  x.fillStyle = '#fff'; x.font = F(800, 60);
+  x.fillText(String(g?.display_name || '').slice(0, 17), M + 40, y + 130);
+  x.fillStyle = 'rgba(255,255,255,.6)'; x.font = F(500, 29);
+  x.fillText(`${g?.brand || ''}${g?.model ? ' · ' + g.model : ''}`.slice(0, 36), M + 40, y + 174);
+  x.fillStyle = '#FF5C00'; x.font = F(800, 29);
+  x.fillText(`${g?.votes ?? 0} votes`, M + 40, y + 214);
+  y += hb + 34;
+
+  // Sans photo, on remplit avec le classement complet : plus intéressant qu'un vide
+  if (!photo && cls.length) {
+    x.fillStyle = '#9C9CA4'; x.font = F(700, 22);
+    x.fillText('LE CLASSEMENT', M, y + 6); y += 42;
+    const total = Math.max(1, b.total_votes);
+    cls.slice(0, 5).forEach((e, i) => {
+      x.fillStyle = '#6E6E76'; x.font = F(700, 26);
+      x.fillText(String(i + 1), M, y + 30);
+      x.fillStyle = '#0B0B0C'; x.font = F(700, 30);
+      x.fillText(String(e.display_name).slice(0, 14), M + 42, y + 30);
+      x.fillStyle = '#9C9CA4'; x.font = F(500, 24);
+      x.fillText(String(e.brand).slice(0, 14), M + 280, y + 29);
+      // barre
+      const bx = M + 470, bw = W - M - 130 - bx;
+      x.fillStyle = '#EFEEEC'; x.beginPath(); x.roundRect(bx, y + 16, bw, 16, 8); x.fill();
+      x.fillStyle = i === 0 ? '#FF5C00' : '#C9C8C6';
+      x.beginPath(); x.roundRect(bx, y + 16, Math.max(10, bw * (e.votes / total)), 16, 8); x.fill();
+      x.fillStyle = '#0B0B0C'; x.font = F(700, 26);
+      const t = String(e.votes);
+      x.fillText(t, W - M - x.measureText(t).width, y + 32);
+      y += 62;
+    });
+  }
+
+  // Pied
+  x.fillStyle = '#0B0B0C'; x.font = F(800, 30);
+  x.fillText('louisnny', M, H - 62);
+  const lw = x.measureText('louisnny').width;
+  x.fillStyle = '#FF5C00'; x.beginPath(); x.arc(M + lw + 20, H - 72, 8, 0, 7); x.fill();
+  x.fillStyle = '#6E6E76'; x.font = F(500, 30);
+  x.fillText('watches', M + lw + 38, H - 62);
+  const u = 'iamlouis.co';
+  x.fillText(u, W - M - x.measureText(u).width, H - 62);
+
+  c.toBlob(bl => {
+    if (!bl) { say('err', "Carte impossible à générer."); return; }
+    telecharger(`bataille-${String(b.number).padStart(2,'0')}-partage.png`, bl, 'image/png');
+    say('ok', photo
+      ? 'Carte de partage téléchargée, prête pour la story.'
+      : "Carte téléchargée. La photo n'a pas pu être chargée, le classement la remplace.");
+  }, 'image/png');
+}
+
+window.__pdf   = pdfRapport;
+window.__csv   = csvVotants;
+window.__carte = cartePartage;
+
+boot();
+</script>
+</body>
+</html>
