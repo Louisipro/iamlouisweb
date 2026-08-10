@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>La Bataille du mois — Louisnny Watches</title>
+<meta name="description" content="Cinq montres, cinq verdicts. Ma note est mon avis — le lot, c'est le vôtre. Votez pour votre favorite."/>
+<meta name="theme-color" content="#FBFBFA"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%230B0B0C'/><circle cx='16' cy='16' r='7' fill='none' stroke='%23FF5C00' stroke-width='2.4'/><path d='M16 12.4V16l2.2 2.2' stroke='%23FF5C00' stroke-width='2.4' stroke-linecap='round' fill='none'/></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="canvas">
+  <div class="veil veil-1"></div>
+  <div class="veil veil-2"></div>
+</div>
+
+<div class="wrap">
+  <nav class="nav" data-rise style="--d:.05s">
+    <a href="index.html" class="nav-logo">Louisnny<i></i><span class="logo-tail">Watches</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Liens</a>
+      <a href="juge-ta-montre.html" class="nav-link"><span class="nav-full">Je juge ta montre</span><span class="nav-short">Juger</span></a>
+      <a href="bataille.html" class="nav-link is-active">Bataille</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+  </nav>
+</div>
+
+<main class="wrap main">
+
+  <!-- Chargement -->
+  <div class="bat-load" id="loading">Chargement de la bataille...</div>
+
+  <!-- Aucune bataille en ligne -->
+  <div class="bat-empty" id="empty" hidden>
+    <div class="bat-empty-t">Aucune bataille en ligne pour l'instant.</div>
+    <p style="max-width:440px;margin:0 auto 26px;line-height:1.75;">
+      La prochaine arrive bientôt. En attendant, envoie ta montre — c'est comme ça
+      qu'on entre dans le casting des cinq.
+    </p>
+    <div class="btn-row" style="justify-content:center;">
+      <a href="juge-ta-montre.html" class="btn btn-accent">Envoyer ma montre</a>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div id="content" hidden>
+
+    <!-- ══ EN-TÊTE ══ -->
+    <section class="bat-head">
+      <span class="eyebrow" id="statusPill"><span class="pulse"></span> <span id="statusText">Votes ouverts</span></span>
+      <h1 class="bat-title">Bataille <em id="batNumber">#01</em></h1>
+      <p class="bat-intro" id="batIntro"></p>
+
+      <div class="countdown" id="countdown" hidden>
+        <span class="cd-label" id="cdLabel">Clôture des votes dans</span>
+        <span class="cd-time" id="cdTime">—</span>
+      </div>
+
+      <div class="btn-row" id="videoRow" style="justify-content:center;margin-top:24px;" hidden>
+        <a href="#" class="btn btn-ghost" id="videoLink" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+            <path d="M5 4.5v15l13-7.5-13-7.5z"/>
+          </svg>
+          Voir la vidéo
+        </a>
+      </div>
+    </section>
+
+    <!-- ══ PALMARÈS (bataille clôturée) ══ -->
+    <section class="section" id="podiumSec" hidden>
+      <div class="sec-head">
+        <span class="sec-num">★</span>
+        <h2 class="sec-title">Le <em>palmarès.</em></h2>
+      </div>
+      <div class="podium">
+        <div class="pod is-public">
+          <div class="pod-eyebrow">Choix du public — remporte le lot</div>
+          <div class="pod-name" id="pubName">—</div>
+          <div class="pod-watch" id="pubWatch">—</div>
+          <div class="pod-meta"><span class="pod-stat" id="pubVotes">—</span></div>
+        </div>
+        <div class="pod">
+          <div class="pod-eyebrow">Meilleur verdict — ma note</div>
+          <div class="pod-name" id="bestName">—</div>
+          <div class="pod-watch" id="bestWatch">—</div>
+          <div class="pod-meta">
+            <span class="tier-badge sm" id="bestTier">—</span>
+            <span class="pod-stat" id="bestScore">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="divergence" id="divergence" hidden></div>
+    </section>
+
+    <!-- ══ LE LOT ══ -->
+    <section class="section" id="prizeSec" hidden>
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <h2 class="sec-title">Le lot du <em>mois.</em></h2>
+      </div>
+      <div class="prize">
+        <img class="prize-img" id="prizeImg" alt="" hidden/>
+        <div class="prize-body">
+          <div class="prize-eyebrow">Pour la montre la plus votée</div>
+          <div class="prize-t" id="prizeTitle">—</div>
+          <div class="prize-d" id="prizeDesc"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ LES 5 MONTRES ══ -->
+    <section class="section">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <h2 class="sec-title">Les cinq <em>montres.</em></h2>
+      </div>
+      <div class="entries" id="entries"></div>
+
+      <!-- Barre de vote -->
+      <div class="votebar" id="votebar" hidden>
+        <span class="votebar-t" id="votebarT">Choisis <em>une montre</em> ci-dessus</span>
+        <input type="email" id="voterEmail" placeholder="ton@email.com" autocomplete="email" maxlength="120" disabled/>
+        <button type="button" class="btn btn-accent" id="voteSubmit" disabled>Valider mon vote</button>
+        <div class="status" id="voteStatus" role="alert" aria-live="polite">
+          <span class="status-ico" id="voteIco"></span>
+          <span id="voteMsg"></span>
+        </div>
+        <p class="votebar-note">
+          Un vote par personne. Ton email sert uniquement à valider ton vote et à te
+          prévenir si tu gagnes — il n'est ni revendu, ni réutilisé.
+          <a href="reglement.html" id="reglementLink">Lire le règlement du jeu</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ══ COMMENT ON NOTE ══ -->
+    <section class="section">
+      <div class="sec-head">
+        <span class="sec-num">03</span>
+        <h2 class="sec-title">Comment je <em>note.</em></h2>
+      </div>
+      <div class="scale">
+        <div class="crit">
+          <div class="crit-t">Le design</div>
+          <div class="crit-d">Proportions, cadran, équilibre. Un caractère propre, ou une imitation ?</div>
+          <div class="crit-pts">10 points</div>
+        </div>
+        <div class="crit">
+          <div class="crit-t">Le rapport qualité-prix</div>
+          <div class="crit-d">Ce qui a été payé face à ce qu'on a réellement au poignet.</div>
+          <div class="crit-pts">10 points</div>
+        </div>
+        <div class="crit">
+          <div class="crit-t">Le porté</div>
+          <div class="crit-d">Taille, épaisseur, bracelet, adéquation au poignet et au style.</div>
+          <div class="crit-pts">10 points</div>
+        </div>
+        <div class="crit">
+          <div class="crit-t">Le facteur X</div>
+          <div class="crit-d">L'histoire, la rareté, ce qui rend cette montre-là mémorable.</div>
+          <div class="crit-pts">10 points</div>
+        </div>
+      </div>
+      <p style="margin-top:18px;font-size:14px;color:var(--ink-50);line-height:1.75;">
+        Ma note ne décide de rien ici. Elle donne un tier, un avis, un point de départ
+        pour la discussion. Le lot, lui, part à la montre que <strong>vous</strong> élisez.
+      </p>
+    </section>
+
+    <!-- ══ PARTICIPER ══ -->
+    <section class="dm">
+      <h2 class="dm-t">La prochaine, c'est <em>peut-être toi.</em></h2>
+      <p class="dm-d">Envoie ta montre. Cinq seront choisies pour la bataille du mois prochain.</p>
+      <div class="btn-row">
+        <a href="juge-ta-montre.html" class="btn btn-accent">Envoyer ma montre</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div class="wrap">
+  <footer class="foot">
+    <span>&copy; 2026 Louisnny Watches · <a href="index.html">Retour aux liens</a> · <a href="reglement.html">Règlement du jeu</a></span>
+    <span class="foot-sign">L'heure, c'est l'art.</span>
+  </footer>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, BUCKET_BATTLES as BUCKET } from './config.js';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const CRITERIA = [
+  ['design', 'Design'],
+  ['value',  'Qualité-prix'],
+  ['wear',   'Porté'],
+  ['x',      'Facteur X'],
+];
+
+const TIER_NAMES = {
+  S: 'Pièce de référence',
+  A: 'Excellent choix',
+  B: 'Solide',
+  C: 'Discutable',
+  D: 'À revoir',
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+const imgUrl = path => path
+  ? `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`
+  : '';
+
+// Mémoire locale de l'email : évite de le retaper d'une visite à l'autre
+const EMAIL_KEY = 'louisnny_voter_email';
+const savedEmail = () => { try { return localStorage.getItem(EMAIL_KEY) || ''; } catch { return ''; } };
+const saveEmail  = e => { try { localStorage.setItem(EMAIL_KEY, e); } catch {} };
+
+let state = { slug: null, data: null, picked: null, cdTimer: null };
+
+/* ══ Chargement ══ */
+async function load(email) {
+  const params = new URLSearchParams(location.search);
+  const slug   = params.get('b') || null;
+
+  const { data, error } = await supabase.rpc('get_battle', {
+    p_slug:  slug,
+    p_email: email ?? savedEmail() ?? null,
+  });
+
+  $('loading').hidden = true;
+
+  if (error || !data || data.ok !== true) {
+    $('empty').hidden = false;
+    return;
+  }
+
+  state.slug = data.battle.slug;
+  state.data = data;
+  $('content').hidden = false;
+  render(data);
+}
+
+/* ══ Rendu ══ */
+function render(d) {
+  const b       = d.battle;
+  const closed  = b.status === 'closed';
+  const entries = d.entries || [];
+
+  document.title = `Bataille #${String(b.number).padStart(2,'0')} — ${b.month_label} · Louisnny Watches`;
+
+  // En-tête
+  $('batNumber').textContent = '#' + String(b.number).padStart(2, '0');
+  $('batIntro').textContent  = b.intro || `${b.month_label} — cinq montres, cinq verdicts. Ma note est mon avis, le lot c'est le vôtre.`;
+  $('statusText').textContent = closed ? 'Votes clôturés' : 'Votes ouverts';
+  if (closed) $('statusPill').querySelector('.pulse').style.animation = 'none';
+
+  if (b.video_url) {
+    $('videoLink').href = b.video_url;
+    $('videoRow').hidden = false;
+  }
+  $('reglementLink').href = b.reglement_url || 'reglement.html';
+
+  // Compte à rebours
+  startCountdown(b.voting_closes_at, closed);
+
+  // Le lot
+  if (b.prize_title) {
+    $('prizeSec').hidden = false;
+    $('prizeTitle').textContent = b.prize_title;
+    $('prizeDesc').textContent  = b.prize_desc || '';
+    if (b.prize_image) {
+      $('prizeImg').src = imgUrl(b.prize_image);
+      $('prizeImg').alt = b.prize_title;
+      $('prizeImg').hidden = false;
+    }
+  }
+
+  // Les montres
+  const winnerId = b.winner_entry_id;
+  $('entries').innerHTML = entries.map(e => card(e, d, winnerId, closed)).join('');
+
+  // Barres de notes animées
+  requestAnimationFrame(() => {
+    document.querySelectorAll('[data-fill]').forEach(el => {
+      el.style.width = el.dataset.fill + '%';
+    });
+  });
+
+  // Vote
+  if (!closed && !d.has_voted) {
+    $('votebar').hidden = false;
+    $('voterEmail').value = savedEmail();
+    document.querySelectorAll('.vote-btn').forEach(btn =>
+      btn.addEventListener('click', () => pick(btn.dataset.id)));
+  }
+
+  // Palmarès
+  if (closed && entries.length) buildPodium(entries, winnerId);
+}
+
+function card(e, d, winnerId, closed) {
+  const isWinner  = closed && e.id === winnerId;
+  const showRes   = d.show_results && e.votes !== null && e.votes !== undefined;
+  const total     = d.total_votes || 0;
+  const pct       = showRes && total > 0 ? Math.round((e.votes / total) * 100) : 0;
+  const isVoted   = d.voted_entry === e.id;
+
+  const bars = CRITERIA.map(([k, label]) => `
+      <div class="bar-row">
+        <span class="bar-label">${label}</span>
+        <span class="bar-track"><span class="bar-fill" data-fill="${(e.scores[k] || 0) * 10}"></span></span>
+        <span class="bar-val">${e.scores[k] ?? 0}<span style="color:var(--ink-35);font-weight:600">/10</span></span>
+      </div>`).join('');
+
+  const foot = closed || d.has_voted
+    ? (showRes ? `
+      <div class="result">
+        <span class="result-track"><span class="result-fill" data-fill="${pct}"></span></span>
+        <span class="result-val">${pct}% <span>· ${e.votes} vote${e.votes > 1 ? 's' : ''}</span></span>
+      </div>
+      ${isVoted ? '<span class="entry-price" style="color:var(--accent-ink);border-color:var(--accent-line);background:var(--accent-soft)">Ton vote</span>' : ''}` : '')
+    : `<button type="button" class="vote-btn" data-id="${e.id}">
+         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+         Je vote pour celle-ci
+       </button>`;
+
+  return `
+  <article class="entry${isWinner ? ' is-winner' : ''}" data-entry="${e.id}">
+    <div class="entry-grid">
+      <div class="entry-photo">
+        <img src="${imgUrl(e.image_path)}" alt="Montre de ${esc(e.display_name)}" loading="lazy"/>
+        <span class="entry-pos">${String(e.position).padStart(2, '0')}</span>
+        ${e.role_label ? `<span class="entry-role">${esc(e.role_label)}</span>` : ''}
+      </div>
+      <div class="entry-body">
+
+        <div class="entry-top">
+          <div class="entry-id">
+            <div class="entry-name">${esc(e.display_name)}${isWinner ? ' 🏆' : ''}</div>
+            ${e.social ? `<div class="entry-social">${esc(e.social)}</div>` : ''}
+            <div class="entry-watch"><strong>${esc(e.brand)}</strong>${e.model ? ' · ' + esc(e.model) : ''}</div>
+            ${e.price ? `<span class="entry-price">${esc(e.price)}</span>` : ''}
+          </div>
+          <div class="entry-score">
+            <span class="entry-total">${e.score_total}<span>/40</span></span>
+            <span class="tier-badge tier-${e.tier}" title="${TIER_NAMES[e.tier] || ''}">${e.tier}</span>
+          </div>
+        </div>
+
+        ${e.verdict ? `<p class="entry-verdict">${esc(e.verdict)}</p>` : ''}
+
+        <div class="bars">${bars}</div>
+
+        ${e.alternative ? `<div class="entry-alt"><strong>Ce que j'aurais pris à la place —</strong> ${esc(e.alternative)}</div>` : ''}
+
+        <div class="entry-foot">${foot}</div>
+      </div>
+    </div>
+  </article>`;
+}
+
+/* ══ Palmarès ══ */
+function buildPodium(entries, winnerId) {
+  const pub  = entries.find(e => e.id === winnerId)
+            || [...entries].sort((a, b) => (b.votes || 0) - (a.votes || 0))[0];
+  const best = [...entries].sort((a, b) => b.score_total - a.score_total)[0];
+  if (!pub || !best) return;
+
+  $('podiumSec').hidden = false;
+  $('pubName').textContent  = pub.display_name;
+  $('pubWatch').textContent = [pub.brand, pub.model].filter(Boolean).join(' · ');
+  $('pubVotes').textContent = `${pub.votes ?? 0} vote${(pub.votes ?? 0) > 1 ? 's' : ''}`;
+
+  $('bestName').textContent  = best.display_name;
+  $('bestWatch').textContent = [best.brand, best.model].filter(Boolean).join(' · ');
+  $('bestScore').textContent = `${best.score_total}/40 — ${TIER_NAMES[best.tier] || ''}`;
+  const tb = $('bestTier');
+  tb.textContent = best.tier;
+  tb.className   = 'tier-badge sm tier-' + best.tier;
+
+  if (pub.id !== best.id) {
+    $('divergence').hidden = false;
+    $('divergence').innerHTML =
+      `Le public n'a pas suivi mon verdict. J'avais mis <strong>${esc(best.display_name)}</strong> en tête,
+       vous avez choisi <strong>${esc(pub.display_name)}</strong>. C'est exactement pour ça que le vote existe.`;
+  }
+}
+
+/* ══ Compte à rebours ══ */
+function startCountdown(closesAt, closed) {
+  if (!closesAt) return;
+  clearInterval(state.cdTimer);
+  const el   = $('countdown');
+  const time = $('cdTime');
+  el.hidden  = false;
+
+  if (closed) {
+    $('cdLabel').textContent = 'Votes clôturés le';
+    time.textContent = new Date(closesAt).toLocaleDateString('fr-FR',
+      { day: 'numeric', month: 'long', year: 'numeric' });
+    el.classList.add('is-over');
+    return;
+  }
+
+  const tick = () => {
+    const ms = new Date(closesAt) - new Date();
+    if (ms <= 0) {
+      clearInterval(state.cdTimer);
+      el.classList.add('is-over');
+      $('cdLabel').textContent = 'Votes';
+      time.textContent = 'Clôturés';
+      $('votebar').hidden = true;
+      return;
+    }
+    const d = Math.floor(ms / 864e5);
+    const h = Math.floor(ms % 864e5 / 36e5);
+    const m = Math.floor(ms % 36e5 / 6e4);
+    const s = Math.floor(ms % 6e4 / 1e3);
+    time.textContent = d > 0 ? `${d}j ${h}h ${m}min` : `${h}h ${String(m).padStart(2,'0')}min ${String(s).padStart(2,'0')}s`;
+  };
+  tick();
+  state.cdTimer = setInterval(tick, 1000);
+}
+
+/* ══ Sélection ══ */
+function pick(id) {
+  state.picked = id;
+  document.querySelectorAll('.vote-btn').forEach(b => {
+    const on = b.dataset.id === id;
+    b.classList.toggle('is-picked', on);
+    b.lastChild.textContent = on ? ' Ma sélection' : ' Je vote pour celle-ci';
+  });
+  document.querySelectorAll('.entry').forEach(a =>
+    a.classList.toggle('is-picked', a.dataset.entry === id));
+
+  const e = (state.data.entries || []).find(x => x.id === id);
+  $('votebarT').innerHTML = `Ton vote : <em>${esc(e ? e.display_name : '')}</em>`;
+  $('voterEmail').disabled = false;
+  $('voteSubmit').disabled = false;
+  $('voterEmail').focus();
+}
+
+/* ══ Messages ══ */
+function say(type, msg) {
+  $('voteStatus').className = 'status show ' + type;
+  $('voteIco').textContent  = type === 'err' ? '!' : '✓';
+  $('voteMsg').textContent  = msg;
+}
+
+const ERRORS = {
+  closed:           "Les votes sont clôturés pour cette bataille.",
+  bad_email:        "Cette adresse email n'a pas l'air valide.",
+  disposable_email: "Les adresses jetables ne sont pas acceptées — le lot est réel, le vote aussi.",
+  already_voted:    "Tu as déjà voté pour cette bataille. Un vote par personne.",
+  bad_entry:        "Cette montre ne fait pas partie de la bataille.",
+  too_many:         "Trop de votes depuis cette connexion. Réessaie depuis un autre réseau.",
+  not_found:        "Bataille introuvable.",
+};
+
+/* ══ Envoi du vote ══ */
+$('voteSubmit').addEventListener('click', async () => {
+  const email = $('voterEmail').value.trim().toLowerCase();
+  if (!state.picked)                     return say('err', "Choisis d'abord une montre.");
+  if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)) return say('err', "Indique une adresse email valide.");
+
+  $('voteSubmit').disabled = true;
+  $('voteSubmit').textContent = 'Envoi...';
+
+  const { data, error } = await supabase.rpc('cast_vote', {
+    p_slug:     state.slug,
+    p_entry_id: state.picked,
+    p_email:    email,
+  });
+
+  if (error) {
+    say('err', "Le vote n'a pas pu être enregistré. Réessaie dans un instant.");
+    $('voteSubmit').disabled = false;
+    $('voteSubmit').textContent = 'Valider mon vote';
+    return;
+  }
+
+  if (data && data.ok === false) {
+    say('err', ERRORS[data.error] || "Le vote n'a pas pu être enregistré.");
+    $('voteSubmit').disabled = false;
+    $('voteSubmit').textContent = 'Valider mon vote';
+    if (data.error === 'already_voted') { saveEmail(email); setTimeout(() => location.reload(), 1600); }
+    return;
+  }
+
+  // Vote pris en compte : on réaffiche avec les résultats
+  saveEmail(email);
+  const votedFor = state.picked;
+  state.data = data;
+  render(data);
+
+  const vb = $('votebar');
+  vb.hidden = false;
+  vb.innerHTML = `
+    <span class="votebar-t" style="color:var(--success)">✓ Vote enregistré.</span>
+    <span style="flex:1;min-width:180px;font-size:13.5px;color:var(--ink-50);line-height:1.6">
+      Les résultats s'affichent maintenant. Je te préviens par email si ta montre gagne.
+    </span>
+    <a href="juge-ta-montre.html" class="btn btn-ghost">Envoyer ma montre</a>`;
+
+  document.querySelector(`[data-entry="${votedFor}"]`)
+    ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+$('voterEmail').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); $('voteSubmit').click(); }
+});
+
+load();
+</script>
+</body>
+</html>
